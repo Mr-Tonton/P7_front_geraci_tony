@@ -23,78 +23,82 @@ a {
     --font-family:'Lato', sans-serif;
     --primary: #070527;
     --secondary:#2C2B43;
-    --lightgray:#ddd;
-    --text-regular:#eee;
+    --lightgray:#bbb;
+    --text-color:#fff;
 }
 
 body {
     font-family: var(--font-family);
-    color: var(--text-regular);
+    color: var(--text-color);
     background-color: var(--primary);
 }
 
-// LAYOUT
+// THEMES
 
-.d-flex {
+.btn {
+    padding: 10px 15px;
+    background-color: white;
+    border: 0;
+    border-radius: 3px;
+    font-weight: 700;
+    cursor: pointer;
+    &-primary {
+      background-color: var(--lightgray);
+      color: var(--primary);
+      &:hover {
+        background-color: var(--text-color);
+        box-shadow: 0 0 3px var(--text-color);
+      }
+      transition: background-color 0.3s;
+    }
+  }
+
+.form {
     display: flex;
-}
-
-.flex-row {
-    flex-direction: row;
-}
-
-.flex-column {
     flex-direction: column;
-}
-
-.flex-justify-center {
     justify-content: center;
-}
-
-.flex-justify-between {
-    justify-content: space-between;
-}
-
-.flex-align-center {
     align-items: center;
+    background-color: var(--secondary);
+    max-width: 800px;
+    margin: auto;
+    border-radius: 5px;
+    padding: 50px 0;
+    
+    &-group {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+    }
+    label {
+        margin-bottom: 5px;
+    }
+
+    input {
+        padding: 12px 5px;
+        margin-bottom: 5px;
+        width: 100%;
+        font-size: 1.2rem;
+        border-radius: 5px;
+    }
 }
 
-.flex-align-between {
-    align-items: space-between;
-}
 
-.flex-fill {
-    flex: 1 1 auto;
-}
-
-.flex-50 {
-    flex: 1 1 50%;
-}
 
 // UTILS
 
-.p-20 {
-    padding: 20px;
+.active {
+    background-color: var(--secondary);
+    border: 1px solid var(--lightgray);
+    border-radius: 3px;
 }
 
-.pr-20 {
-    padding-right: 20px;
+.text-alert {
+    color: red;
 }
 
-.pl-20 {
-    padding-left: 20px;
-}
-
-.m-20 {
-    margin: 10px;
-}
-
-.mb-20 {
-    margin-bottom: 20px;
-}
-
-.mt-20 {
-    margin-bottom: 20px;
+.text-valid {
+    color: green;
 }
 
 // DEBUG 
