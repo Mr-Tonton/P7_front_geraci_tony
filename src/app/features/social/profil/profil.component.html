@@ -1,1 +1,29 @@
-<p>profil works!</p>
+<main>
+  <div class="profil-image-container">
+    <img [src]="currentUserInfo?.imageUrl" alt="image profil de base" />
+    <button class="btn-circle">
+      <i class="fa-regular fa-pen-to-square" title="Modifier"></i>
+    </button>
+  </div>
+  <div class="profil-info-container">
+    <div class="info-container">
+      <div class="user-info">
+        <div class="email-info">
+          <p>email : <span>{{ currentUserInfo?.email }}</span></p>
+        </div>
+        <div class="name-info">
+          <p>nom d'utilisateur : <span>{{ currentUserInfo?.name }}</span></p>
+          <button class="btn-circle">
+            <i class="fa-regular fa-pen-to-square" title="Modifier"></i>
+          </button>
+        </div>
+      </div>
+      <div class="account-type-info">
+        <p>type de compte : <span>{{ currentUserInfo?.accountType }}</span></p>
+      </div>
+    </div>
+    <div class="delete-account-container">
+      <button class="btn btn-alert">Supprimer le compte?</button>
+    </div>
+  </div>
+</main>

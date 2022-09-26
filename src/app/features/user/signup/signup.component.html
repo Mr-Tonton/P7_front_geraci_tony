@@ -1,27 +1,43 @@
-<h1>Bienvenue sur GROUPOMANIA</h1>
-<h2>Veuillez remplir le formulaire pour créer votre compte</h2>
+<main>
+  <h1>Bienvenue sur GROUPOMANIA</h1>
+  <h2>Veuillez remplir le formulaire pour créer votre compte</h2>
 
-<form class="form">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" id="email" formControlName="email">
-    <p class="text-alert">message d'erreur</p>
-  </div>
-  <div class="form-group">
-    <label for="password">Mot de passe</label>
-    <input type="password" id="password" formControlName="password">
-    <p class="text-alert">message d'erreur</p>
-  </div>
-  <div class="form-group">
-    <label for="password-confirm">Vérifier mot de passe</label>
-    <input type="password" id="password-confirm" formControlName="passwordConfirm">
-    <p class="text-alert">message d'erreur</p>
-  </div>
-  <div class="form-group">
-    <label for="pseudo">Pseudo</label>
-    <input type="text" class="form-control" id="pseudo" formControlName="pseudo">
-    <p class="text-alert">message d'erreur</p>
-  </div>
-  <button type="button" class="btn btn-primary">SIGN UP</button>
-  <p class="text-alert"> message d'erreur</p>
-</form>
+  <form [formGroup]="signinForm" class="form">
+
+    <div class="form-group">
+      <label for="emailSignin">Email</label>
+      <input type="email" id="emailSignin" formControlName="email">
+      <span class="text-alert"
+        *ngIf="signinForm.get('email')!.hasError('required') && signinForm.get('email')!.touched">Votre email est
+        requis</span>
+      <span class="text-alert" *ngIf="signinForm.get('email')!.hasError('pattern')">Votre entrée n'est pas au format
+        email "test@test.com"</span>
+      <span class="text-valid" *ngIf="signinForm.get('email')!.valid">Email valide</span>
+    </div>
+
+    <div class="form-group">
+      <label for="passwordSignin">Mot de passe</label>
+      <input type="password" id="passwordSignin" formControlName="password">
+      <span class="text-alert"
+        *ngIf="signinForm.get('password')!.hasError('required') && signinForm.get('password')!.touched">Votre mot de
+        passe est requis</span>
+      <span class="text-alert" *ngIf="signinForm.get('password')!.hasError('pattern')">Mot de passe incorrect: min 8
+        caractères, 1 majuscule, 1 minuscule, 1 chiffre, max 64 caractères et pas d'espaces</span>
+      <span class="text-valid" *ngIf="signinForm.get('password')!.valid">Mot de passe valide</span>
+    </div>
+
+    <div class="form-group">
+      <label for="nameSignIn">Nom d'utilisateur</label>
+      <input type="text" id="nameSignin" class="form-control" formControlName="name">
+      <span class="text-alert"
+        *ngIf="signinForm.get('name')!.hasError('required') && signinForm.get('name')!.touched">Votre nom est
+        requis</span>
+      <span class="text-alert" *ngIf="signinForm.get('name')!.hasError('pattern')">Votre entrée ne doit pas contenir de
+        caractères spéciaux et faire moins de 30 caractères</span>
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="onSignup()" [disabled]="signinForm.invalid">SIGN UP</button>
+    <span class="text-alert text-alert-final" *ngIf="errorMsg&&!validMsg">{{ errorMsg }}</span>
+    <span class="text-valid text-valid-final" *ngIf="validMsg"> {{ validMsg}}</span>
+  </form>
+</main>

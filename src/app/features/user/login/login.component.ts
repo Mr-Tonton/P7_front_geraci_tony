@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { tap, catchError, EMPTY } from "rxjs"
+
 
 @Component({
   templateUrl: './login.component.html',
@@ -6,9 +11,41 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  errorMsg!: string;
+  validMsg!: string;
+  loginForm!: FormGroup;
 
-  ngOnInit(): void {
+  constructor(
+    private auth: AuthService, 
+    private router:Router, 
+    private fb:FormBuilder) { }
+
+  ngOnInit():void {
+    this.loginForm = this.fb.group({
+        email: [null, [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)]],
+        password: [null, Validators.required],
+      });
   }
+
+  onLogin() {    
+    const email = this.loginForm.get('email')!.value;
+    const password = this.loginForm.get('password')!.value;
+    this.auth.loginUser(email, password).pipe(
+      tap(() => {
+        this.validMsg = "Identifiants valides, connexion...";
+        setTimeout(() => {
+          this.router.navigate(['/feed']);
+        }, 1500);
+      }),
+      catchError(error => {
+        if(error.error.error !== undefined) {
+          this.errorMsg = error.error.error;
+        } else if(error.status === 0) {
+          this.errorMsg = "Un problème est rencontré avec le serveur, essayez ultérieurement";
+        }
+        return EMPTY;
+      })
+    ).subscribe();
+  };
 
 }

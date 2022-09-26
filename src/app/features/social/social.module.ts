@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedComponent } from './feed/feed.component';
+import { ProfilComponent } from './profil/profil.component';
 
 
 
 @NgModule({
   declarations: [
-    FeedComponent
+    FeedComponent,
+    ProfilComponent,
   ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+  ],
 })
 export class SocialModule { }

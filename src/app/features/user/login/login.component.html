@@ -1,16 +1,30 @@
-<h1>Bienvenue sur GROUPOMANIA</h1>
-<h2>Veuillez entrer vos identifiants de connexion</h2>
-<form class="form">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" id="email" formControlName="email">
-    <p class="text-alert">message d'erreur</p>
-  </div>
-  <div class="form-group">
-    <label for="password">Mot de passe</label>
-    <input type="password" id="password" formControlName="password">
-    <p class="text-alert">message d'erreur</p>
-  </div>
-  <button class="btn btn-primary" type="button">LOGIN</button>
-  <p class="text-alert">message d'erreur</p>
-</form>
+<main>
+  <h1>Bienvenue sur GROUPOMANIA</h1>
+  <h2>Veuillez entrer vos identifiants de connexion</h2>
+  <form [formGroup]="loginForm" class="form">
+    <div class="form-group">
+      <label for="emailLogin">Email</label>
+      <input type="email" id="emailLogin" formControlName="email" />
+      <span class="text-alert" *ngIf="
+          loginForm.get('email')!.hasError('required') &&
+          loginForm.get('email')!.touched
+        ">Votre email est requis</span>
+      <span class="text-alert" *ngIf="loginForm.get('email')!.hasError('pattern')">Votre entrée n'est pas au format
+        "email"</span>
+      <span class="text-valid" *ngIf="loginForm.get('email')!.valid">Email valide</span>
+    </div>
+    <div class="form-group">
+      <label for="passwordLogin">Mot de passe</label>
+      <input type="password" id="passwordLogin" formControlName="password" />
+      <span class="text-alert" *ngIf="
+          loginForm.get('password')!.hasError('required') &&
+          loginForm.get('password')!.touched
+        ">Votre mot de passe est requis</span>
+    </div>
+    <button class="btn btn-primary" type="button" (click)="onLogin()" [disabled]="loginForm.invalid">
+      LOGIN
+    </button>
+    <span class="text-alert text-alert-final" *ngIf="errorMsg && !validMsg">{{ errorMsg }}</span>
+    <span class="text-valid text-valid-final" *ngIf="validMsg">{{ validMsg }}</span>
+  </form>
+</main>

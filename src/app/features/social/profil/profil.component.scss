@@ -1,0 +1,75 @@
+i {
+    font-size: 20px;
+}
+
+.profil-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 150px;
+
+    img {
+        border-radius: 50%;
+        width: 300px;
+        border: 5px solid var(--secondary);
+        margin-right: 20px;
+        box-shadow: 0 0 5px var(--text-color);
+        object-fit: cover;
+    }
+}
+
+.profil-info-container {
+    display: flex;
+    justify-content: space-between;
+
+    .info-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .user-info {
+            margin-bottom: 150px;
+            display: flex;
+            flex-direction: column;
+            font-size: 1.2rem;
+
+            span {
+                font-size: 1.7rem;
+                margin-left: 10px;
+            }
+
+            .email-info {
+                span {
+                    margin-left: 10px;
+                    color: #888;
+                }
+            }
+
+            .name-info {
+                display: flex;
+                align-items: center;
+
+                p {
+                    margin-right: 10px;
+                }
+            }
+
+
+        }
+
+        .account-type-info {
+            font-size: 1.2rem;
+
+            span {
+                margin-left: 10px;
+                font-size: 1.7rem;
+                color: var(--alert-color);
+            }
+        }
+    }
+
+    .delete-account-container {
+        display: flex;
+        align-items: flex-end;
+    }
+}
