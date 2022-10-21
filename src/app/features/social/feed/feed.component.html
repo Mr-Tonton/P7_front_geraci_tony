@@ -1,5 +1,4 @@
 <main>
-
     <!-- PREVIEW NEW POST -->
 
     <section *ngIf="showPreview" class="post-container-preview">
@@ -7,16 +6,18 @@
         <div class="new-post-preview">
             <div class="post-preview-heading">
                 <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
-                <textarea autofocus name=""></textarea>
-                <span><i class="fa-solid fa-image" title="Ajouter une image"></i></span>
+                <textarea autofocus [(ngModel)]="textInput" (click)="openPreview()"></textarea>
+                <input type="file" accept="image/png, image/jpeg" #imageInput (change)="onFileAdded($event)" name="file"
+                    id="file" class="inputfile" />
+                <label for="file"><i class="fa-solid fa-image" title="Ajouter une image"></i></label>
                 <span><i class="fa-regular fa-paper-plane" title="Envoyer"></i></span>
             </div>
             <div class="separator separator-heading"></div>
 
             <div class="post-preview-content">
-                <p>test</p>
+                <p>{{ textInput }}</p>
                 <div class="img-container">
-                    <img>
+                    <img [src]="imagePreview">
                 </div>
             </div>
         </div>
@@ -33,98 +34,7 @@
 
     <section class="list-posts-container">
         <!-- *ngFor sur post-container -->
-
-        <div class="post-container">
-
-            <div class="post-heading">
-                <div class="left-part">
-                    <img class="small-profil-picture" src="../../../../assets/images/profil_tony.jpg"
-                        alt="image de profil">
-                    <div class="user-info">
-                        <p class="userName">UserName</p>
-                        <p>Post Date</p>
-                    </div>
-                </div>
-                <span><i class="fa-solid fa-ellipsis" title="Modifier / Supprimer"></i></span>
-            </div>
-            <div class="separator separator-heading"></div>
-
-            <div class="post-content">
-                <p> On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de
-                    distractions, et empêche de se concentrer sur la mise en page elle-même. L'avantage du Lorem Ipsum
-                    sur un texte générique comme 'Du texte. Du texte. Du texte.' est qu'il possède une distribution de
-                    lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De
-                    nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont fait du Lorem Ipsum leur
-                    faux texte par défaut, et une recherche pour 'Lorem Ipsum' vous conduira vers de nombreux sites qui
-                    n'en sont encore qu'à leur phase de construction. Plusieurs versions sont apparues avec le temps,
-                    parfois par accident, souvent intentionnellement (histoire d'y rajouter de petits clins d'oeil,
-                    voire des phrases embarassantes).
-                </p>
-                <div class="img-container">
-                    <img src="../../../../assets/images/gettyimages-925277388-644x410.jpg" alt="">
-                </div>
-            </div>
-
-            <div class="separator separator-post"></div>
-
-            <div class="post-comments">
-                <div class="new-comment">
-                    <input type="text" placeholder="Ajoutez un commentaire">
-                    <span><i class="fa-regular fa-paper-plane" title="Envoyer"></i></span>
-                </div>
-                <div class="see-comments">
-                    <i *ngIf="!showComments" (click)="openComments()" class="fa-regular fa-circle-down"></i>
-                    <i *ngIf="showComments" (click)="closeComments()" class="fa-regular fa-circle-up"></i>
-                </div>
-                <div *ngIf="showComments" class="comments-list">
-                    <!-- NG FOR sur comment-container -->
-                    <div class="comment-container">
-                        <div class="comment-heading">
-                            <div class="left-part">
-                                <img class="small-profil-picture small-profil-picture-comment"
-                                    src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
-                                <div class="user-info">
-                                    <p class="userName-comment">UserName</p>
-                                    <p>Post Date</p>
-                                </div>
-                            </div>
-                            <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
-                        </div>
-                        <div class="separator separator-heading"></div>
-                        <p class="comment-content">ceci est mon commentaire</p>
-                    </div>
-                    <div class="comment-container">
-                        <div class="comment-heading">
-                            <div class="left-part">
-                                <img class="small-profil-picture small-profil-picture-comment"
-                                    src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
-                                <div class="user-info">
-                                    <p class="userName-comment">UserName</p>
-                                    <p>Post Date</p>
-                                </div>
-                            </div>
-                            <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
-                        </div>
-                        <div class="separator separator-heading"></div>
-                        <p class="comment-content">ceci est mon commentaire</p>
-                    </div>
-                    <div class="comment-container">
-                        <div class="comment-heading">
-                            <div class="left-part">
-                                <img class="small-profil-picture small-profil-picture-comment"
-                                    src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
-                                <div class="user-info">
-                                    <p class="userName-comment">UserName</p>
-                                    <p>Post Date</p>
-                                </div>
-                            </div>
-                            <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
-                        </div>
-                        <div class="separator separator-heading"></div>
-                        <p class="comment-content">ceci est mon commentaire</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <app-post *ngFor="let post of allPosts" [post]="post"></app-post>
+        <p></p>
     </section>
 </main>

@@ -6,19 +6,34 @@ i {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 150px;
 
     img {
         border-radius: 50%;
         width: 300px;
+        height: 300px;
         border: 5px solid var(--secondary);
-        margin-right: 20px;
         box-shadow: 0 0 5px var(--text-color);
         object-fit: cover;
     }
+
+    i {
+        margin-left: 20px;
+    }
 }
 
+.change-image-validator {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+
+    button {
+        margin: 0 5px;
+    }
+}
+
+
 .profil-info-container {
+    margin-top: 100px;
     display: flex;
     justify-content: space-between;
 
@@ -54,6 +69,20 @@ i {
                 }
             }
 
+            .updateName {
+                margin-top: 10px;
+
+                input {
+                    padding: 8px;
+                    border-radius: 5px;
+                    font-size: 1.3rem;
+                }
+
+                button {
+                    margin-left: 5px;
+                }
+            }
+
 
         }
 
@@ -68,8 +97,16 @@ i {
         }
     }
 
-    .delete-account-container {
+    .delete-user-container {
         display: flex;
-        align-items: flex-end;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        .delete-user-validator {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+        }
     }
+
 }

@@ -6,12 +6,10 @@
       </a>
     </div>
     <ul *ngIf="!(isAuth$ | async)">
-      <!-- <ul *ngIf="router.url === '/login' || router.url === '/signup'"> -->
       <li routerLink="signup" routerLinkActive="active">SignUp</li>
       <li routerLink="login" routerLinkActive="active">Login</li>
     </ul>
     <ul *ngIf="isAuth$ | async">
-      <!-- <ul *ngIf="router.url === '/feed' || router.url === '/profil'"> -->
       <li routerLink="feed" *ngIf="router.url === '/profil'" title="Accueil">
         <i class="fa-solid fa-house"></i>
       </li>

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { tap, catchError, EMPTY, switchMap } from "rxjs"
+import { AuthUser } from 'src/app/core/interfaces/auth-user';
 
 @Component({
   templateUrl: './signup.component.html',
@@ -13,6 +14,7 @@ export class SignupComponent implements OnInit {
   errorMsg!: string;
   validMsg!: string;
   signinForm!: FormGroup;
+
 
   constructor(
     private auth: AuthService, 
@@ -28,11 +30,9 @@ export class SignupComponent implements OnInit {
   }
 
   onSignup() {
-    const email = this.signinForm.get('email')!.value;
-    const password = this.signinForm.get('password')!.value;
-    const name = this.signinForm.get('name')!.value;
-    this.auth.createUser(email, password, name).pipe(
-      switchMap(() => this.auth.loginUser(email, password)),
+    const userEntries: AuthUser = this.signinForm.value;
+    this.auth.createUser(userEntries).pipe(
+      switchMap(() => this.auth.loginUser(userEntries)),
       tap(() => {
         this.validMsg = "Utilisateur créé"
         setTimeout(() => {

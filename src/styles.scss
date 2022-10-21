@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-  * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -20,14 +20,14 @@ a {
 }
 
 :root {
-    --font-family:'Lato', sans-serif;
+    --font-family: 'Lato', sans-serif;
     --primary: #070527;
-    --secondary:#2C2B43;
+    --secondary: #2C2B43;
     --tertiary: #414164;
-    --lightgray:#bbb;
-    --text-color:#fff;
-    --alert-color:rgb(255, 75, 75);
-    --valid-color:rgb(121, 255, 121);
+    --lightgray: #bbb;
+    --text-color: #fff;
+    --alert-color: rgb(255, 75, 75);
+    --valid-color: rgb(121, 255, 121);
 }
 
 body {
@@ -47,25 +47,38 @@ body {
     font-size: 1.2rem;
     color: var(--primary);
     cursor: pointer;
+
     &-primary {
-      background-color: var(--lightgray);
-      color: var(--primary);
-      &:hover {
-        background-color: var(--text-color);
-        box-shadow: 0 0 3px var(--text-color);
-      }
-      transition: background-color 0.3s;
+        background-color: var(--lightgray);
+        color: var(--primary);
+
+        &:hover {
+            background-color: var(--text-color);
+            box-shadow: 0 0 3px var(--text-color);
+        }
+
+        transition: background-color 0.3s;
     }
+
     &-alert {
         background-color: var(--text-color);
         color: var(--primary);
+
+        &:focus {
+            background-color: var(--alert-color);
+            box-shadow: 0 0 3px var(--text-color);
+            color: var(--text-color);
+        }
+
         &:hover {
             background-color: var(--alert-color);
             box-shadow: 0 0 3px var(--text-color);
             color: var(--text-color);
-          }
-          transition: background-color 0.3s;
+        }
+
+        transition: background-color 0.3s;
     }
+
     &-circle {
         cursor: pointer;
         background-color: var(--primary);
@@ -73,13 +86,15 @@ body {
         color: var(--text-color);
         border-radius: 50%;
         padding: 10px 10px;
+
         &:hover {
             background-color: var(--text-color);
             color: var(--primary);
-          }
-          transition: background-color 0.3s;
+        }
+
+        transition: background-color 0.3s;
     }
-  }
+}
 
 .form {
     display: flex;
@@ -91,13 +106,14 @@ body {
     margin: auto;
     border-radius: 5px;
     padding: 50px 0;
-    
+
     &-group {
         width: 80%;
         display: flex;
         flex-direction: column;
         margin: 5px;
     }
+
     label {
         margin-bottom: 5px;
     }
@@ -126,8 +142,13 @@ body {
     font-weight: bold;
     text-align: center;
     padding: 0 5px;
+
     &-final {
         font-size: 1.2rem;
+    }
+
+    &-small {
+        font-size: .5rem;
     }
 }
 
@@ -136,9 +157,19 @@ body {
     font-weight: bold;
     text-align: center;
     padding: 0 5px;
+
     &-final {
         font-size: 1.2rem;
     }
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
 
 // DEBUG 

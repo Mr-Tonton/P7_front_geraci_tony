@@ -3,54 +3,52 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { User } from '../interfaces/user.interface';
+import { AuthUser } from '../interfaces/auth-user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  isAuth$ = new BehaviorSubject<boolean>(false);
-  private authToken = '';
-  private userId = '';
-  currentUserInfo?:User;
+  private userId: string = "";
+  public isAuth$ = new BehaviorSubject<boolean>(false);
   private authUrl:string = `${environment.backendServer}/api/auth`;
   
 
   constructor(private http: HttpClient,
               private router: Router) {}
 
-  createUser(email: string, password: string, name: string):Observable<Object> {
-    return this.http.post<{ message: string }>(`${this.authUrl}/signup`, {email: email, password: password, name: name});
+  createUser(user: AuthUser):Observable<Object> {
+    return this.http.post<{ message: string }>(`${this.authUrl}/signup`, {email: user.email, password: user.password, name: user.name});
   }
 
-  getToken():string {
-    return this.authToken;
+  getToken():string | null {
+    return localStorage.getItem("token");
   }
 
-  getUserId():string {
+  getUserId():string | null {
     return this.userId;
   }
 
-  loginUser(email: string, password: string):Observable<Object> {
-    return this.http.post<{ userId: string, token: string }>(`${this.authUrl}/login`, {email: email, password: password}).pipe(
+  loginUser(user: AuthUser):Observable<Object> {
+    return this.http.post<{ userId: string, token: string }>(`${this.authUrl}/login`, {email: user.email, password: user.password}).pipe(
       tap(({ userId, token }) => {
+        localStorage.setItem("token", token);
         this.userId = userId;
-        this.authToken = token;
         this.isAuth$.next(true);
-        this.getCurrentUserInfo(userId).subscribe(user => this.currentUserInfo = user);
       })
     );
   }
 
+  verifyLoggedIn() {
+    this.http.get(`${this.authUrl}/token/${this.getToken()}`).subscribe(() => {
+      this.isAuth$.next(true);
+    });
+  }
+
   logout():void {
-    this.authToken = '';
-    this.userId = '';
+    localStorage.removeItem("token");
+    this.userId = "";
     this.isAuth$.next(false);
     this.router.navigate(['/login']);
   }
-
-  getCurrentUserInfo(id: string): Observable<User> {
-    return this.http.get<User>(`${this.authUrl}/${id}`);
-};
 }

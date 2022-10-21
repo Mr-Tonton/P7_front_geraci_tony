@@ -8,8 +8,8 @@ import { SignupComponent } from "./features/user/signup/signup.component";
 
 const routes: Routes = [
     { path: '', redirectTo: "feed", pathMatch:"full" },
-    { path: "feed", component: FeedComponent, canActivate :[AuthGuard] },
-    { path: "profil", component: ProfilComponent, canActivate :[AuthGuard] },
+    { path: "feed", canActivate: [AuthGuard], component: FeedComponent },
+    { path: "profil", canActivate: [AuthGuard], component: ProfilComponent },
     { path: "signup", component: SignupComponent },
     { path: "login", component: LoginComponent },
   ];

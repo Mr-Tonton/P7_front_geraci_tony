@@ -1,0 +1,82 @@
+<div class="post-container">
+
+    <div class="post-heading">
+        <div class="left-part">
+            <img class="small-profil-picture" src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
+            <div class="user-info">
+                <p class="userName">UserName</p>
+                <p>Post Date</p>
+            </div>
+        </div>
+        <span><i class="fa-solid fa-ellipsis" title="Modifier / Supprimer"></i></span>
+    </div>
+    <div class="separator separator-heading"></div>
+
+    <div class="post-content">
+        <p>{{ post.postContent }}</p>
+        <div class="img-container">
+            <img src="{{ post.imageUrl }}" alt="">
+        </div>
+    </div>
+
+    <div class="separator separator-post"></div>
+
+    <div class="post-comments">
+        <div class="new-comment">
+            <input type="text" placeholder="Ajoutez un commentaire">
+            <span><i class="fa-regular fa-paper-plane" title="Envoyer"></i></span>
+        </div>
+        <div class="see-comments">
+            <i *ngIf="!showComments" (click)="openComments()" class="fa-regular fa-circle-down"></i>
+            <i *ngIf="showComments" (click)="closeComments()" class="fa-regular fa-circle-up"></i>
+        </div>
+        <div *ngIf="showComments" class="comments-list">
+            <!-- NG FOR sur comment-container -->
+            <div class="comment-container">
+                <div class="comment-heading">
+                    <div class="left-part">
+                        <img class="small-profil-picture small-profil-picture-comment"
+                            src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
+                        <div class="user-info">
+                            <p class="userName-comment">UserName</p>
+                            <p>Post Date</p>
+                        </div>
+                    </div>
+                    <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
+                </div>
+                <div class="separator separator-heading"></div>
+                <p class="comment-content">ceci est mon commentaire</p>
+            </div>
+            <div class="comment-container">
+                <div class="comment-heading">
+                    <div class="left-part">
+                        <img class="small-profil-picture small-profil-picture-comment"
+                            src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
+                        <div class="user-info">
+                            <p class="userName-comment">UserName</p>
+                            <p>Post Date</p>
+                        </div>
+                    </div>
+                    <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
+                </div>
+                <div class="separator separator-heading"></div>
+                <p class="comment-content">ceci est mon commentaire</p>
+            </div>
+            <div class="comment-container">
+                <div class="comment-heading">
+                    <div class="left-part">
+                        <img class="small-profil-picture small-profil-picture-comment"
+                            src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
+                        <div class="user-info">
+                            <p class="userName-comment">UserName</p>
+                            <p>Post Date</p>
+                        </div>
+                    </div>
+                    <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
+                </div>
+                <div class="separator separator-heading"></div>
+                <p class="comment-content">ceci est mon commentaire</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,23 @@
 <main>
   <div class="profil-image-container">
-    <img [src]="currentUserInfo?.imageUrl" alt="image profil de base" />
-    <button class="btn-circle">
-      <i class="fa-regular fa-pen-to-square" title="Modifier"></i>
-    </button>
+    <img *ngIf="!imagePreview" [src]="currentUserInfo?.imageUrl" alt="image profil de base" />
+    <img *ngIf="imagePreview" [src]="imagePreview" alt="image profil de base" />
+    <form [formGroup]="imageForm">
+      <div>
+        <input id="imageInputRef" #takeInput type="file" accept="image/png, image/jpeg" #imageInput
+          (change)="onFileAdded($event)" name="file" id="file" class="inputfile" />
+        <label *ngIf="!imagePreview" for="file"><i class="fa-regular fa-pen-to-square btn-circle"
+            title="Modifier"></i></label>
+      </div>
+    </form>
+  </div>
+  <div class="change-image-validator">
+    <div>
+      <button *ngIf="imagePreview" class="btn btn-primary" (click)="onImageCancel()">Annuler</button>
+    </div>
+    <div>
+      <button *ngIf="imagePreview" class="btn btn-primary" (click)="onImageSubmit()">Valider</button>
+    </div>
   </div>
   <div class="profil-info-container">
     <div class="info-container">
@@ -13,17 +27,39 @@
         </div>
         <div class="name-info">
           <p>nom d'utilisateur : <span>{{ currentUserInfo?.name }}</span></p>
-          <button class="btn-circle">
+          <button *ngIf="!changingName" class="btn-circle" (click)="startChangingName()">
             <i class="fa-regular fa-pen-to-square" title="Modifier"></i>
           </button>
+          <button *ngIf="changingName" class="btn-circle" (click)="startChangingName()">
+            <i class="fa-regular fa-square-minus" title="Modifier"></i>
+          </button>
         </div>
+        <form [formGroup]="nameForm" class="updateName" *ngIf="changingName">
+          <input type="text" formControlName="name" [placeholder]="currentUserInfo?.name">
+          <button class=" btn-circle" (click)="onNameSubmit()" [disabled]="!nameForm.valid">
+            <i class="fa-regular fa-paper-plane"></i>
+          </button>
+        </form>
+        <p class="text-alert" *ngIf="nameForm.get('name')!.hasError('pattern')">Votre entrée ne doit
+          pas contenir de
+          caractères spéciaux et faire moins de 30 caractères</p>
       </div>
       <div class="account-type-info">
         <p>type de compte : <span>{{ currentUserInfo?.accountType }}</span></p>
       </div>
     </div>
-    <div class="delete-account-container">
-      <button class="btn btn-alert">Supprimer le compte?</button>
+    <div class="delete-user-container">
+      <button (click)="startDeleteUser()" class="btn btn-alert">Supprimer le compte?</button>
+      <div *ngIf="deleteAccount" class="delete-user-validator">
+        <div>
+          <button class="btn btn-primary" (click)="stopDeleteUser()">Annuler</button>
+        </div>
+        <div>
+          <button class="btn btn-primary" (click)="onDeleteCurrentUser()">Valider</button>
+        </div>
+      </div>
+      <span *ngIf="validDeleteAccount" class="text-valid text-valid-final">Compte utilisateur ( nom:
+        {{currentUserInfo?.name}} ) supprimé !</span>
     </div>
   </div>
 </main>

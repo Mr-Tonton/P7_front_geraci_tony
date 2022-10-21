@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { tap, catchError, EMPTY } from "rxjs"
+import { tap, catchError, EMPTY, VirtualTimeScheduler } from "rxjs"
+import { AuthUser } from 'src/app/core/interfaces/auth-user';
 
 
 @Component({
@@ -27,10 +28,9 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  onLogin() {    
-    const email = this.loginForm.get('email')!.value;
-    const password = this.loginForm.get('password')!.value;
-    this.auth.loginUser(email, password).pipe(
+  onLogin() {
+    const userEntries: AuthUser = this.loginForm.value;
+    this.auth.loginUser(userEntries).pipe(
       tap(() => {
         this.validMsg = "Identifiants valides, connexion...";
         setTimeout(() => {
@@ -47,5 +47,4 @@ export class LoginComponent implements OnInit {
       })
     ).subscribe();
   };
-
 }

@@ -15,4 +15,13 @@ export class PostService {
   getPosts(): Observable<Post[]> {
      return this.http.get<any>(`${this.postUrl}`);
   }
+
+  createPost(post: Post, image: File) {
+    const formData = new FormData();
+    formData.append('post', JSON.stringify(post));
+    if(image !== undefined) {
+      formData.append('image', image);
+    }
+    return this.http.post<{ message: string }>(`${environment.backendServer}`, formData);
+  }
 }
