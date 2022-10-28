@@ -4,7 +4,7 @@
     <img *ngIf="imagePreview" [src]="imagePreview" alt="image profil de base" />
     <form [formGroup]="imageForm">
       <div>
-        <input id="imageInputRef" #takeInput type="file" accept="image/png, image/jpeg" #imageInput
+        <input id="imageInputRef" type="file" accept="image/png, image/jpeg" #takeInput #imageInput
           (change)="onFileAdded($event)" name="file" id="file" class="inputfile" />
         <label *ngIf="!imagePreview" for="file"><i class="fa-regular fa-pen-to-square btn-circle"
             title="Modifier"></i></label>
@@ -49,7 +49,8 @@
       </div>
     </div>
     <div class="delete-user-container">
-      <button (click)="startDeleteUser()" class="btn btn-alert">Supprimer le compte?</button>
+      <button *ngIf="!acceptDeleteAccount" (click)="startDeleteUser()" class="btn btn-alert">Supprimer le
+        compte?</button>
       <div *ngIf="deleteAccount" class="delete-user-validator">
         <div>
           <button class="btn btn-primary" (click)="stopDeleteUser()">Annuler</button>

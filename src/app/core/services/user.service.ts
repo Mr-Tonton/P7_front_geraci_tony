@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user.interface';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,13 +10,9 @@ import { AuthService } from './auth.service';
 export class UserService {
   private baseUrl: string = `${environment.backendServer}`;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private auth: AuthService
-  ) {}
+  constructor(private http: HttpClient) {}
 
-  getCurrentUserInfo(id: string | null): Observable<User> {
+  getUserInfo(id: string | null): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/api/auth/${id}`);
   }
 

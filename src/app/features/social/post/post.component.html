@@ -2,10 +2,11 @@
 
     <div class="post-heading">
         <div class="left-part">
-            <img class="small-profil-picture" src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
+            <img *ngIf="postUser?.imageUrl" class="small-profil-picture" [src]="postUser.imageUrl"
+                alt="image de profil">
             <div class="user-info">
-                <p class="userName">UserName</p>
-                <p>Post Date</p>
+                <p *ngIf="postUser?.name" class="userName">{{ postUser.name }}</p>
+                <p>{{ post.createdAt | date: "dd MMM yyyy, HH:mm" }} </p>
             </div>
         </div>
         <span><i class="fa-solid fa-ellipsis" title="Modifier / Supprimer"></i></span>
@@ -14,8 +15,8 @@
 
     <div class="post-content">
         <p>{{ post.postContent }}</p>
-        <div class="img-container">
-            <img src="{{ post.imageUrl }}" alt="">
+        <div *ngIf="post.imageUrl" class="img-container">
+            <img [src]="post.imageUrl" alt="image du post">
         </div>
     </div>
 
