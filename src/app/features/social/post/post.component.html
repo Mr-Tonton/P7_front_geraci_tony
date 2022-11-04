@@ -9,7 +9,27 @@
                 <p>{{ post.createdAt | date: "dd MMM yyyy, HH:mm" }} </p>
             </div>
         </div>
-        <span><i class="fa-solid fa-ellipsis" title="Modifier / Supprimer"></i></span>
+        <div *ngIf="currentUserId === post.userId || currentUserTypeAccount === 'admin'"
+            class="delete-update-container">
+            <span *ngIf="!showChoice && !deletePost" (click)="openPostChoice()"><i class="fa-solid fa-ellipsis"
+                    title="Modifier / Supprimer"></i></span>
+            <span
+                *ngIf="(showChoice && !deletePost && currentUserTypeAccount !== 'admin') || showChoice && !deletePost && ((post.userId === currentUserId)&& currentUserTypeAccount ==='admin')"
+                (click)="onUpdatePost()"><i class="fa-regular fa-pen-to-square" title="Modifier"></i></span>
+            <span *ngIf="showChoice && !deletePost" (click)="openDeletePost()"><i class="fa-solid fa-trash"
+                    title="Supprimer"></i></span>
+            <span *ngIf="showChoice && !deletePost" (click)="openPostChoice()"><i class="fa-solid fa-xmark"
+                    title="Modifier / Supprimer"></i></span>
+        </div>
+        <div *ngIf="deletePost" class="delete-post-validator">
+            <div>
+                <button class="btn btn-primary" (click)="stopDeletePost()">Annuler</button>
+            </div>
+            <div>
+                <button (click)="onDeletePost()" class="btn btn-alert">Supprimer le
+                    Poste?</button>
+            </div>
+        </div>
     </div>
     <div class="separator separator-heading"></div>
 
@@ -22,62 +42,28 @@
 
     <div class="separator separator-post"></div>
 
+    <div class="like-showcomment-container">
+        <div class="like-container">
+            <i [ngClass]="{'liked':liked}" class="fa-regular fa-thumbs-up" (click)="onLike()"></i>
+            <p>{{post.likes}}</p>
+        </div>
+        <div class="showcomment-container">
+            <button class="btn-comment" (click)="openCloseComments()">voir commentaires</button>
+        </div>
+    </div>
+    <div class="separator separator-post"></div>
+
     <div class="post-comments">
         <div class="new-comment">
             <input type="text" placeholder="Ajoutez un commentaire">
             <span><i class="fa-regular fa-paper-plane" title="Envoyer"></i></span>
         </div>
-        <div class="see-comments">
-            <i *ngIf="!showComments" (click)="openComments()" class="fa-regular fa-circle-down"></i>
-            <i *ngIf="showComments" (click)="closeComments()" class="fa-regular fa-circle-up"></i>
-        </div>
-        <div *ngIf="showComments" class="comments-list">
+        <div *ngIf=" showComments" class="comments-list">
             <!-- NG FOR sur comment-container -->
-            <div class="comment-container">
-                <div class="comment-heading">
-                    <div class="left-part">
-                        <img class="small-profil-picture small-profil-picture-comment"
-                            src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
-                        <div class="user-info">
-                            <p class="userName-comment">UserName</p>
-                            <p>Post Date</p>
-                        </div>
-                    </div>
-                    <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
-                </div>
-                <div class="separator separator-heading"></div>
-                <p class="comment-content">ceci est mon commentaire</p>
-            </div>
-            <div class="comment-container">
-                <div class="comment-heading">
-                    <div class="left-part">
-                        <img class="small-profil-picture small-profil-picture-comment"
-                            src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
-                        <div class="user-info">
-                            <p class="userName-comment">UserName</p>
-                            <p>Post Date</p>
-                        </div>
-                    </div>
-                    <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
-                </div>
-                <div class="separator separator-heading"></div>
-                <p class="comment-content">ceci est mon commentaire</p>
-            </div>
-            <div class="comment-container">
-                <div class="comment-heading">
-                    <div class="left-part">
-                        <img class="small-profil-picture small-profil-picture-comment"
-                            src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
-                        <div class="user-info">
-                            <p class="userName-comment">UserName</p>
-                            <p>Post Date</p>
-                        </div>
-                    </div>
-                    <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
-                </div>
-                <div class="separator separator-heading"></div>
-                <p class="comment-content">ceci est mon commentaire</p>
-            </div>
+            <app-comment></app-comment>
+        </div>
+        <div class="see-comments">
+            <button class="btn-comment">voir plus...</button>
         </div>
     </div>
 </div>

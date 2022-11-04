@@ -24,7 +24,5 @@
     <button class="btn btn-primary" type="button" (click)="onLogin()" [disabled]="loginForm.invalid">
       LOGIN
     </button>
-    <span class="text-alert text-alert-final" *ngIf="errorMsg && !validMsg">{{ errorMsg }}</span>
-    <span class="text-valid text-valid-final" *ngIf="validMsg">{{ validMsg }}</span>
   </form>
 </main>

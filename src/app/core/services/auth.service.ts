@@ -4,15 +4,14 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AuthUser } from '../interfaces/auth-user';
-import { User } from '../interfaces/user.interface';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  public userId: string = '';
-  public currentUserInfo: User | undefined;
-  public isAuth$ = new BehaviorSubject<boolean>(false);
+  private userId: string = '';
+  private isAuth$ = new BehaviorSubject<boolean>(false);
   private authUrl: string = `${environment.backendServer}/api/auth`;
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -25,12 +24,16 @@ export class AuthService {
     });
   }
 
-  getToken(): string | null {
+  getTokenFromLs(): string | null {
     return localStorage.getItem('token');
   }
 
   getUserId(): string | null {
     return this.userId;
+  }
+
+  getIsAuth() {
+    return this.isAuth$;
   }
 
   loginUser(user: AuthUser): Observable<Object> {
@@ -53,5 +56,19 @@ export class AuthService {
     this.userId = '';
     this.isAuth$.next(false);
     this.router.navigate(['/login']);
+  }
+
+  tryToReconnect() {
+    let decodedToken: { exp: number; iat: number; userId: string } = jwt_decode(
+      this.getTokenFromLs()!
+    );
+    let dateNow = +(Date.now() / 1000).toFixed();
+    if (decodedToken.exp > dateNow) {
+      this.isAuth$.next(true);
+      this.userId = decodedToken.userId;
+    } else {
+      localStorage.removeItem('token');
+      this.isAuth$.next(false);
+    }
   }
 }

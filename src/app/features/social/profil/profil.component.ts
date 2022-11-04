@@ -1,9 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { catchError, EMPTY, tap } from 'rxjs';
 import { User } from 'src/app/core/interfaces/user.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { PostService } from 'src/app/core/services/post.service';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -20,21 +21,21 @@ export class ProfilComponent implements OnInit {
   changingName = false;
   deleteAccount = false;
   acceptDeleteAccount = false;
-  validDeleteAccount = false;
   file!: File;
   imagePreview: string | null = null;
 
   constructor(
-    private auth: AuthService,
-    private user: UserService,
+    private authService: AuthService,
+    private userService: UserService,
+    private postService: PostService,
+    private notificationService: NotificationService,
     private fb: FormBuilder,
-    private router: Router,
-    private post: PostService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.user
-      .getUserInfo(this.auth.getUserId())
+    this.userService
+      .getUserInfo(this.authService.getUserId())
       .subscribe((user) => (this.currentUserInfo = user));
     this.initEmptyForm();
   }
@@ -62,31 +63,44 @@ export class ProfilComponent implements OnInit {
 
   onNameSubmit() {
     const nameEntry: { name: string } = this.nameForm.value;
-    this.user
+    this.userService
       .updateName(this.currentUserInfo?.userId, nameEntry)
-      .pipe(
-        tap((res) => {
-          this.currentUserInfo!.name = res;
-          this.changingName = false;
-        })
-      )
-      .subscribe();
+      .subscribe((res) => {
+        this.notificationService.openSnackBar(
+          "Nom d'utilisateur modifié avec succès !",
+          'Fermer',
+          'success-snackbar'
+        );
+        this.currentUserInfo!.name = res;
+        this.changingName = false;
+      });
     this.nameForm.reset();
   }
 
   onImageSubmit() {
-    this.user
+    this.userService
       .updateProfileImage(
         this.currentUserInfo?.userId,
         this.imageForm.get('imageUrl')!.value
       )
       .pipe(
-        tap(() => {
-          this.imagePreview = null;
+        catchError((error) => {
+          this.notificationService.openSnackBar(
+            'Un problème est rencontré avec le serveur, essayez ultérieurement',
+            'Fermer',
+            'error-snackbar'
+          );
+          return EMPTY;
         })
       )
       .subscribe((res) => {
+        this.imagePreview = null;
         this.currentUserInfo!.imageUrl = res;
+        this.notificationService.openSnackBar(
+          'Photo de profil modifiée avec succès !',
+          'Fermer',
+          'success-snackbar'
+        );
       });
   }
 
@@ -104,16 +118,19 @@ export class ProfilComponent implements OnInit {
   }
 
   onDeleteCurrentUser() {
-    this.user.deleteUser(this.currentUserInfo?.userId).subscribe(() => {
-      this.auth.isAuth$.next(false);
-      this.validDeleteAccount = true;
+    this.userService.deleteUser(this.currentUserInfo?.userId).subscribe(() => {
+      this.authService.getIsAuth().next(false);
+      this.notificationService.openSnackBar(
+        `Compte utilisateur : ${this.currentUserInfo?.name} supprimé`,
+        'Fermer',
+        'success-snackbar'
+      );
       this.deleteAccount = false;
-      this.acceptDeleteAccount = true;
-      this.post.deleteAllUserPost(this.currentUserInfo?.userId).subscribe();
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-        this.acceptDeleteAccount = false;
-      }, 2500);
+      this.postService
+        .deleteAllUserPost(this.currentUserInfo?.userId)
+        .subscribe();
+      this.router.navigate(['/login']);
+      localStorage.removeItem('token');
     });
   }
 

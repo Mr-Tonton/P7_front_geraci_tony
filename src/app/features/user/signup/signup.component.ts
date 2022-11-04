@@ -4,18 +4,18 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { tap, catchError, EMPTY, switchMap } from 'rxjs';
 import { AuthUser } from 'src/app/core/interfaces/auth-user';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
-  errorMsg!: string;
-  validMsg!: string;
   signinForm!: FormGroup;
 
   constructor(
-    private auth: AuthService,
+    private authService: AuthService,
+    private notificationService: NotificationService,
     private router: Router,
     private fb: FormBuilder
   ) {}
@@ -52,27 +52,35 @@ export class SignupComponent implements OnInit {
 
   onSignup() {
     const userEntries: AuthUser = this.signinForm.value;
-    this.auth
+    this.authService
       .createUser(userEntries)
       .pipe(
-        switchMap(() => this.auth.loginUser(userEntries)),
-        tap(() => {
-          this.validMsg = 'Utilisateur créé';
-          setTimeout(() => {
-            this.router.navigate(['/feed']);
-          }, 1500);
-        }),
+        switchMap(() => this.authService.loginUser(userEntries)),
         catchError((error) => {
-          console.log(error.error.message);
           if (error.status === 0) {
-            this.errorMsg =
-              'Un problème est rencontré avec le serveur, essayez ultérieurement';
+            this.notificationService.openSnackBar(
+              'Un problème est rencontré avec le serveur, essayez ultérieurement',
+              'Fermer',
+              'error-snackbar'
+            );
           } else {
-            this.errorMsg = 'Email déjà utilisé';
+            this.notificationService.openSnackBar(
+              'Email déjà utilisé',
+              'Fermer',
+              'error-snackbar'
+            );
           }
           return EMPTY;
         })
       )
-      .subscribe();
+      .subscribe(() => {
+        this.notificationService.openSnackBar(
+          'Bienvenue sur Groupomania !',
+          'Fermer',
+          'success-snackbar',
+          5000
+        );
+        this.router.navigate(['/feed']);
+      });
   }
 }

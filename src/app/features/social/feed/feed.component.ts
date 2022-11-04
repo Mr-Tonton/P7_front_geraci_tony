@@ -5,20 +5,17 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { catchError, EMPTY, tap } from 'rxjs';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { PostService } from 'src/app/core/services/post.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { environment } from 'src/environments/environment';
 
 import { Post } from 'src/app/core/interfaces/post.interface';
 import { User } from 'src/app/core/interfaces/user.interface';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { tap } from 'rxjs';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   templateUrl: './feed.component.html',
@@ -27,30 +24,33 @@ import { tap } from 'rxjs';
 export class FeedComponent implements OnInit {
   @ViewChild('inputImage', { static: false })
   inputImage!: ElementRef<HTMLInputElement>;
-  skip = 0;
-  limit = 2;
+  @ViewChild('inputArea', { static: false })
+  inputArea!: ElementRef<HTMLTextAreaElement>;
+  collectionLength!: number;
   noMorePosts = false;
+  showPreview = false;
+  validPost = false;
+  onLoading = true;
   currentUserInfo: User | undefined;
   postForm!: FormGroup;
-  showPreview: boolean = false;
   fewPosts: Post[] = [];
   file!: File;
   imagePreview: string | null = null;
-  validPost = false;
-  validMsg?: string;
-  errorMsg?: string;
 
   constructor(
-    private auth: AuthService,
-    private user: UserService,
-    private post: PostService,
+    private authService: AuthService,
+    private userService: UserService,
+    private postService: PostService,
+    private notificationService: NotificationService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.user.getUserInfo(this.auth.getUserId()).subscribe((user) => {
-      this.currentUserInfo = user;
-    });
+    this.userService
+      .getUserInfo(this.authService.getUserId())
+      .subscribe((user) => {
+        this.currentUserInfo = user;
+      });
     this.getPosts();
     this.initEmptyForm();
   }
@@ -63,21 +63,47 @@ export class FeedComponent implements OnInit {
   }
 
   getPosts(): void {
-    this.post.getPosts(this.skip, this.limit).subscribe((posts: Post[]) => {
-      this.fewPosts = posts;
-    });
-  }
-
-  getMorePosts(): void {
-    this.skip += this.limit;
-    this.post.getPosts(this.skip, this.limit).subscribe((posts: Post[]) => {
-      for (let post of posts) {
-        this.fewPosts.push(post);
-      }
-      if (posts.length < 2) {
-        this.noMorePosts = true;
-      }
-    });
+    this.onLoading = true;
+    if (this.fewPosts.length === 0) {
+      this.postService
+        .getPosts(environment.skip, environment.limit)
+        .pipe(
+          catchError((error) => {
+            this.notificationService.openSnackBar(
+              'Un problème est rencontré avec le serveur, essayez ultérieurement',
+              'Fermer',
+              'error-snackbar'
+            );
+            console.log(error);
+            this.onLoading = false;
+            return EMPTY;
+          })
+        )
+        .subscribe((res) => {
+          console.log(res);
+          this.collectionLength = res.collectionLength;
+          this.fewPosts = res.posts;
+          if (this.collectionLength === this.fewPosts.length) {
+            this.noMorePosts = true;
+          }
+          this.onLoading = false;
+        });
+    } else {
+      environment.skip += environment.limit;
+      this.postService
+        .getPosts(environment.skip, environment.limit)
+        .subscribe((res) => {
+          this.collectionLength = res.collectionLength;
+          let posts = res.posts;
+          for (let post of posts) {
+            this.fewPosts.push(post);
+          }
+          if (this.collectionLength === this.fewPosts.length) {
+            this.noMorePosts = true;
+          }
+          this.onLoading = false;
+        });
+    }
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -88,10 +114,8 @@ export class FeedComponent implements OnInit {
   }
 
   autoGrow(e: any) {
-    let inputArea = document.getElementById('inputArea');
-    inputArea!.style.height = `auto`;
-    let scHeight = e.target.scrollHeight;
-    inputArea!.style.height = `${scHeight}px`;
+    this.inputArea.nativeElement.style.height = `auto`;
+    this.inputArea.nativeElement.style.height = `${e.target.scrollHeight}px`;
   }
 
   openPreview() {
@@ -109,31 +133,81 @@ export class FeedComponent implements OnInit {
   }
 
   onPostSubmit() {
+    this.noMorePosts = false;
     this.postForm.get('userId')?.setValue(this.currentUserInfo?.userId);
     if (this.imagePreview) {
-      this.postForm.addControl('imageUrl', new FormControl(this.file));
-      this.post
+      this.postService
         .createPost(this.postForm.value, this.file)
         .pipe(
-          tap(() => {
-            this.imagePreview = null;
+          catchError((error) => {
+            if (error.error.error.name === 'ValidationError') {
+              this.notificationService.openSnackBar(
+                'Veuillez ajouter du contenu',
+                'Fermer',
+                'error-snackbar'
+              );
+            } else {
+              this.notificationService.openSnackBar(
+                'Veuillez essayer ultérieurement',
+                'Fermer',
+                'error-snackbar'
+              );
+            }
+            return EMPTY;
           })
         )
-        .subscribe();
+        .subscribe(() => {
+          this.imagePreview = null;
+          this.postForm.reset();
+          this.validPost = true;
+          this.notificationService.openSnackBar(
+            'Votre post a été créé avec succès !',
+            'Fermer',
+            'success-snackbar'
+          );
+          this.resetFeed();
+          this.getPosts();
+        });
     } else {
-      this.post.createPost(this.postForm.value).subscribe();
+      this.postService
+        .createPost(this.postForm.value)
+        .pipe(
+          catchError((error) => {
+            if (error.error.error.name === 'ValidationError') {
+              this.notificationService.openSnackBar(
+                'Veuillez ajouter du contenu',
+                'Fermer',
+                'error-snackbar'
+              );
+            } else {
+              this.notificationService.openSnackBar(
+                'Veuillez essayer ultérieurement',
+                'Fermer',
+                'error-snackbar'
+              );
+            }
+            return EMPTY;
+          })
+        )
+        .subscribe(() => {
+          this.postForm.reset();
+          this.validPost = true;
+          this.notificationService.openSnackBar(
+            'Votre post a été créé avec succès !',
+            'Fermer',
+            'success-snackbar'
+          );
+          this.resetFeed();
+          this.getPosts();
+        });
     }
-    this.postForm.reset();
-    this.validPost = true;
-    this.validMsg = 'Votre post a été crée avec succès !';
+  }
 
-    setTimeout(() => {
-      this.skip = 0;
-      this.getPosts();
-      this.showPreview = false;
-      this.validMsg = undefined;
-      this.validPost = false;
-    }, 2500);
+  resetFeed() {
+    this.fewPosts = [];
+    environment.skip = 0;
+    this.showPreview = false;
+    this.validPost = false;
   }
 
   onFileAdded(event: Event) {

@@ -6,6 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 registerLocaleData(localeFr);
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 //composants
 import { AppComponent } from './app.component';
@@ -18,21 +20,20 @@ import { UserModule } from './features/user/user.module';
 import { SocialModule } from './features/social/social.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-  ],
+  declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     SocialModule,
     UserModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

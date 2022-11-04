@@ -2,12 +2,7 @@
 
 .userName {
     font-size: 1.4rem;
-    font-weight: 700;
-
-    &-comment {
-        font-size: 1.2rem;
-        font-weight: 700;
-    }
+    font-weight: 500;
 }
 
 .small-profil-picture {
@@ -18,10 +13,6 @@
     border: 3px solid var(--text-color);
     margin-right: 20px;
     object-fit: cover;
-
-    &-comment {
-        width: 50px;
-    }
 }
 
 i {
@@ -69,6 +60,24 @@ i {
         .left-part {
             display: flex;
         }
+
+        .delete-update-container {
+            span {
+                margin: 0 3px;
+            }
+
+            .fa-xmark {
+                color: rgb(148, 37, 37);
+            }
+        }
+
+        .delete-post-validator {
+            display: flex;
+
+            button {
+                margin: 0 5px;
+            }
+        }
     }
 
     .post-content {
@@ -93,6 +102,41 @@ i {
         }
     }
 
+    .like-showcomment-container {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px 0;
+
+        .like-container {
+            display: flex;
+            align-items: center;
+
+            i {
+                box-shadow: 0 0 3px var(--text-color);
+            }
+
+            .liked {
+                color: var(--valid-color);
+                box-shadow: 0 0 3px var(--valid-color);
+
+            }
+
+            p {
+                padding: 2px 0 0 10px;
+                display: flex;
+            }
+        }
+
+        .showcomment-container {
+
+            button {
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+
+
     .post-comments {
         width: 75%;
         margin: 50px auto;
@@ -110,6 +154,7 @@ i {
                 border: 2px solid var(--primary);
                 box-shadow: 0 0 5px var(--text-color);
                 border-radius: 3px;
+                margin-right: 10px;
             }
         }
 
@@ -117,47 +162,16 @@ i {
             margin: 15px 0;
             width: 100%;
 
-            i {
-                margin: 10px 0;
+            button {
                 display: flex;
                 justify-content: center;
-                font-weight: 700;
-                font-size: 1.2rem;
-                width: 20%;
                 margin: auto;
-                cursor: pointer;
-                transition: all .4s;
-                border: 1px solid var(--text-color);
-
-                :hover {
-                    background-color: var(--text-color);
-                    color: var(--primary);
-                    border-radius: 5px;
-
-                }
             }
         }
 
         .comments-list {
-            .comment-container {
-                padding: 5px 5px;
-                border-radius: 10px;
-                margin-bottom: 10px;
-                background-color: var(--tertiary);
+            margin-top: 20px;
 
-                .comment-heading {
-                    display: flex;
-                    justify-content: space-between;
-
-                    .left-part {
-                        display: flex;
-                    }
-                }
-
-                .comment-content {
-                    padding: 5px;
-                }
-            }
         }
     }
 }
