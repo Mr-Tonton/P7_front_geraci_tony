@@ -26,10 +26,6 @@ export class PostService {
     return this.http.post<{ message: string }>(`${this.postUrl}`, formData);
   }
 
-  deleteAllUserPost(id: string | undefined) {
-    return this.http.delete(`${this.postUrl}/user_posts/${id}`);
-  }
-
   deletePost(post_id: string) {
     return this.http.delete(`${this.postUrl}/${post_id}`);
   }

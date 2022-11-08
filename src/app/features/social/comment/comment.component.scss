@@ -42,6 +42,10 @@ i {
             font-weight: 500;
         }
 
+        .comment-post-date {
+            font-size: .9rem;
+        }
+
         .small-profil-picture {
             box-shadow: 0 0 50px var(--primary);
             border-radius: 50%;
@@ -52,8 +56,17 @@ i {
             object-fit: cover;
         }
 
-        .comment-content {
-            padding: 5px;
+    }
+
+    .comment-content {
+        padding: 10px;
+    }
+
+    .delete-comment-validator {
+        display: flex;
+
+        button {
+            margin: 0 5px;
         }
     }
 }

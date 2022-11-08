@@ -7,11 +7,10 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   intercept(
     req: HttpRequest<any>,
@@ -19,7 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const headers = new HttpHeaders().append(
       'Authorization',
-      `Bearer ${this.authService.getTokenFromLs()}`
+      `Bearer ${localStorage.getItem('token')}`
     );
     const modifiedReq = req.clone({ headers });
     return next.handle(modifiedReq);

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { AuthUser } from '../interfaces/auth-user';
+import { AuthUser } from '../interfaces/auth-user.interface';
 import jwt_decode from 'jwt-decode';
 
 @Injectable({
@@ -60,7 +60,7 @@ export class AuthService {
 
   tryToReconnect() {
     let decodedToken: { exp: number; iat: number; userId: string } = jwt_decode(
-      this.getTokenFromLs()!
+      localStorage.getItem('token')!
     );
     let dateNow = +(Date.now() / 1000).toFixed();
     if (decodedToken.exp > dateNow) {

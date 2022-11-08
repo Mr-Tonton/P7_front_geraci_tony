@@ -1,7 +1,6 @@
 <main>
   <div class="profil-image-container">
-    <img *ngIf="!imagePreview" [src]="currentUserInfo?.imageUrl" alt="image profil de base" />
-    <img *ngIf="imagePreview" [src]="imagePreview" alt="image profil de base" />
+    <img *ngIf="imageContainer" [src]="imageContainer" alt="image profil de base" />
     <form [formGroup]="imageForm">
       <div>
         <input id="imageInputRef" type="file" accept="image/png, image/jpeg" #takeInput #imageInput

@@ -45,25 +45,27 @@
     <div class="like-showcomment-container">
         <div class="like-container">
             <i [ngClass]="{'liked':liked}" class="fa-regular fa-thumbs-up" (click)="onLike()"></i>
-            <p>{{post.likes}}</p>
+            <p [ngClass]="{'text-valid':liked}">{{post.likes}}</p>
         </div>
         <div class="showcomment-container">
-            <button class="btn-comment" (click)="openCloseComments()">voir commentaires</button>
+            <button *ngIf="fewComments.length > 0" class="btn-comment" (click)="openCloseComments()">{{ showCommentsText
+                }}</button>
         </div>
     </div>
     <div class="separator separator-post"></div>
 
     <div class="post-comments">
-        <div class="new-comment">
-            <input type="text" placeholder="Ajoutez un commentaire">
-            <span><i class="fa-regular fa-paper-plane" title="Envoyer"></i></span>
-        </div>
+        <form [formGroup]="commentForm" class="new-comment">
+            <input formControlName="commentContent" type="text" placeholder="Ajoutez un commentaire">
+            <span (click)="onCommentSubmit()"><i class="fa-regular fa-paper-plane" title="Envoyer"></i></span>
+        </form>
         <div *ngIf=" showComments" class="comments-list">
             <!-- NG FOR sur comment-container -->
-            <app-comment></app-comment>
-        </div>
-        <div class="see-comments">
-            <button class="btn-comment">voir plus...</button>
+            <app-comment *ngFor="let comment of fewComments" [comment]="comment"
+                (commentDeleted)="deletedComment($event)"></app-comment>
+            <div class="see-comments">
+                <button *ngIf="!noMoreComments" class="btn-comment" (click)="getComments()">voir plus...</button>
+            </div>
         </div>
     </div>
 </div>

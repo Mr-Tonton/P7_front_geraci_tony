@@ -1,14 +1,28 @@
 <div class="comment-container">
     <div class="comment-heading">
         <div class="left-part">
-            <img class="small-profil-picture" src="../../../../assets/images/profil_tony.jpg" alt="image de profil">
+            <img *ngIf="commentUserInfo?.imageUrl" class="small-profil-picture" [src]="commentUserInfo.imageUrl"
+                alt="image de profil">
             <div class="user-info">
-                <p class="username-comment">UserName</p>
-                <p>Post Date</p>
+                <p *ngIf="commentUserInfo?.name" class="username-comment">{{commentUserInfo.name}}</p>
+                <p class="comment-post-date"> {{ comment.createdAt | date: "dd MMM yyyy, HH:mm" }}</p>
             </div>
         </div>
-        <span><i class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
+        <div class="delete-comment-container"
+            *ngIf="currentUserId === comment.userId || currentUserTypeAccount === 'admin'">
+            <span *ngIf="!deleteComment" (click)="openDeleteComment()"><i
+                    class="fa-regular fa-rectangle-xmark exit-icon" title="Supprimer"></i></span>
+        </div>
+        <div *ngIf="deleteComment" class="delete-comment-validator">
+            <div>
+                <button class="btn btn-primary-smaller" (click)="stopDeleteComment()">Annuler</button>
+            </div>
+            <div>
+                <button (click)="onDeleteComment()" class="btn btn-alert-smaller">Supprimer le
+                    Poste?</button>
+            </div>
+        </div>
     </div>
     <div class="separator separator-heading"></div>
-    <p class="comment-content">ceci est mon commentaire</p>
+    <p class="comment-content">{{comment.commentContent}}</p>
 </div>

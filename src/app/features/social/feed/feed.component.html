@@ -24,7 +24,7 @@
         </div>
     </section>
     <!-- AJOUT DE NOUVELLE PUBLICATIONS -->
-    <section id="test" class="new-post-container">
+    <section class="new-post-container">
         <div *ngIf="onLoading" class="spinner-container">
             <mat-spinner></mat-spinner>
         </div>
@@ -37,8 +37,7 @@
     <section class="list-posts-container">
 
         <!-- *ngFor sur post-container -->
-        <app-post *ngFor="let post of fewPosts" [post]="post"></app-post>
-        <p></p>
+        <app-post *ngFor="let post of fewPosts" [post]="post" (postDeleted)="deletedPost($event)"></app-post>
     </section>
     <div class="show-more-posts">
         <button *ngIf="!noMorePosts" class="btn btn-primary" (click)="getPosts()">Voir plus de publications</button>

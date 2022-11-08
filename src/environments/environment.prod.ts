@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  backendServer: "http://localhost:3000"
+  backendServer: 'http://localhost:3000',
+  limit: 2,
 };

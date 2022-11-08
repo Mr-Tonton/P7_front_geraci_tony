@@ -5,7 +5,6 @@ import { catchError, EMPTY, tap } from 'rxjs';
 import { User } from 'src/app/core/interfaces/user.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { PostService } from 'src/app/core/services/post.service';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -22,12 +21,12 @@ export class ProfilComponent implements OnInit {
   deleteAccount = false;
   acceptDeleteAccount = false;
   file!: File;
-  imagePreview: string | null = null;
+  imagePreview: boolean = false;
+  imageContainer: string | undefined = undefined;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private postService: PostService,
     private notificationService: NotificationService,
     private fb: FormBuilder,
     private router: Router
@@ -36,7 +35,10 @@ export class ProfilComponent implements OnInit {
   ngOnInit(): void {
     this.userService
       .getUserInfo(this.authService.getUserId())
-      .subscribe((user) => (this.currentUserInfo = user));
+      .subscribe((user) => {
+        this.currentUserInfo = user;
+        this.imageContainer = this.currentUserInfo.imageUrl;
+      });
     this.initEmptyForm();
   }
 
@@ -94,8 +96,9 @@ export class ProfilComponent implements OnInit {
         })
       )
       .subscribe((res) => {
-        this.imagePreview = null;
+        this.imagePreview = false;
         this.currentUserInfo!.imageUrl = res;
+        this.imageContainer = this.currentUserInfo?.imageUrl;
         this.notificationService.openSnackBar(
           'Photo de profil modifiée avec succès !',
           'Fermer',
@@ -106,7 +109,8 @@ export class ProfilComponent implements OnInit {
 
   onImageCancel() {
     this.inputImage.nativeElement.value = '';
-    this.imagePreview = null;
+    this.imagePreview = false;
+    this.imageContainer = this.currentUserInfo?.imageUrl;
   }
 
   startDeleteUser() {
@@ -126,9 +130,6 @@ export class ProfilComponent implements OnInit {
         'success-snackbar'
       );
       this.deleteAccount = false;
-      this.postService
-        .deleteAllUserPost(this.currentUserInfo?.userId)
-        .subscribe();
       this.router.navigate(['/login']);
       localStorage.removeItem('token');
     });
@@ -140,7 +141,8 @@ export class ProfilComponent implements OnInit {
     this.imageForm.updateValueAndValidity();
     const reader = new FileReader();
     reader.onload = () => {
-      this.imagePreview = reader.result as string;
+      this.imageContainer = reader.result as string;
+      this.imagePreview = true;
     };
     reader.readAsDataURL(this.file);
   }

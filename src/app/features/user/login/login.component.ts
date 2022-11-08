@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { tap, catchError, EMPTY } from 'rxjs';
-import { AuthUser } from 'src/app/core/interfaces/auth-user';
+import { AuthUser } from 'src/app/core/interfaces/auth-user.interface';
 import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({

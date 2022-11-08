@@ -8,7 +8,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
-  declarations: [FeedComponent, ProfilComponent, PostComponent, CommentComponent],
+  declarations: [
+    FeedComponent,
+    ProfilComponent,
+    PostComponent,
+    CommentComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
