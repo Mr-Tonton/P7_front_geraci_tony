@@ -1,31 +1,21 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { catchError, EMPTY, tap } from 'rxjs';
-
-import { AuthService } from 'src/app/core/services/auth.service';
-import { PostService } from 'src/app/core/services/post.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { environment } from 'src/environments/environment';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { catchError, EMPTY } from 'rxjs';
 
 import { Post } from 'src/app/core/interfaces/post.interface';
 import { User } from 'src/app/core/interfaces/user.interface';
+import { environment } from 'src/environments/environment';
+
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { PostService } from 'src/app/core/services/post.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.scss'],
 })
 export class FeedComponent implements OnInit {
-  @ViewChild('inputImage', { static: false })
-  inputImage!: ElementRef<HTMLInputElement>;
-  @ViewChild('inputArea', { static: false })
-  inputArea!: ElementRef<HTMLTextAreaElement>;
+  postUpdate!: Post | undefined;
   postCollectionLength!: number;
   noMorePosts: boolean = false;
   skip: number = 0;
@@ -33,17 +23,14 @@ export class FeedComponent implements OnInit {
   validPost: boolean = false;
   onLoading: boolean = true;
   currentUserInfo: User | undefined;
-  postForm!: FormGroup;
   fewPosts: Post[] = [];
-  file: File | undefined;
   imagePreview: string | null = null;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private postService: PostService,
-    private notificationService: NotificationService,
-    private fb: FormBuilder
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -53,14 +40,6 @@ export class FeedComponent implements OnInit {
         this.currentUserInfo = user;
       });
     this.getPosts();
-    this.initEmptyForm();
-  }
-
-  initEmptyForm() {
-    this.postForm = this.fb.group({
-      postContent: [null, Validators.required],
-      userId: [null],
-    });
   }
 
   getPosts(): void {
@@ -100,11 +79,6 @@ export class FeedComponent implements OnInit {
     }
   }
 
-  autoGrow(e: any) {
-    this.inputArea.nativeElement.style.height = `auto`;
-    this.inputArea.nativeElement.style.height = `${e.target.scrollHeight}px`;
-  }
-
   openPreview() {
     this.showPreview = true;
   }
@@ -112,54 +86,13 @@ export class FeedComponent implements OnInit {
   closePreview() {
     this.showPreview = false;
     this.imagePreview = null;
-  }
-
-  cancelImage() {
-    this.imagePreview = null;
-    this.inputImage.nativeElement.value = '';
-  }
-
-  onPostSubmit() {
-    this.noMorePosts = false;
-    this.postForm.get('userId')?.setValue(this.currentUserInfo?.userId);
-    this.postService
-      .createPost(this.postForm.value, this.file ?? undefined)
-      .pipe(
-        catchError((error) => {
-          if (error.error.error.name === 'ValidationError') {
-            this.notificationService.openSnackBar(
-              'Veuillez ajouter du contenu',
-              'Fermer',
-              'error-snackbar'
-            );
-          } else {
-            this.notificationService.openSnackBar(
-              'Veuillez essayer ultérieurement',
-              'Fermer',
-              'error-snackbar'
-            );
-          }
-          return EMPTY;
-        })
-      )
-      .subscribe(() => {
-        this.imagePreview = null;
-        this.file = undefined;
-        this.postForm.reset();
-        this.validPost = true;
-        this.notificationService.openSnackBar(
-          'Votre post a été créé avec succès !',
-          'Fermer',
-          'success-snackbar'
-        );
-        this.resetFeed();
-        this.getPosts();
-      });
+    this.postUpdate = undefined;
   }
 
   resetFeed() {
     this.fewPosts = [];
     this.skip = 0;
+    this.updatePost;
     this.showPreview = false;
     this.validPost = false;
   }
@@ -171,12 +104,23 @@ export class FeedComponent implements OnInit {
     this.fewPosts = newArray;
   }
 
-  onFileAdded(event: Event) {
-    this.file = (event.target as HTMLInputElement).files![0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(this.file);
+  updatePost($event: Post) {
+    this.postUpdate = $event;
+    this.showPreview = true;
+  }
+
+  postedPost() {
+    this.noMorePosts = false;
+    this.showPreview = false;
+    this.resetFeed();
+    this.getPosts();
+  }
+
+  updatedPost() {
+    this.postUpdate = undefined;
+    this.noMorePosts = false;
+    this.showPreview = false;
+    this.resetFeed();
+    this.getPosts();
   }
 }

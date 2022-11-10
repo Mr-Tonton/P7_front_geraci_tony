@@ -3,8 +3,8 @@
     <img *ngIf="imageContainer" [src]="imageContainer" alt="image profil de base" />
     <form [formGroup]="imageForm">
       <div>
-        <input id="imageInputRef" type="file" accept="image/png, image/jpeg" #takeInput #imageInput
-          (change)="onFileAdded($event)" name="file" id="file" class="inputfile" />
+        <input type="file" accept="image/png, image/jpeg" #inputImage (change)="onFileAdded($event)" name="file"
+          id="file" class="inputfile" />
         <label *ngIf="!imagePreview" for="file"><i class="fa-regular fa-pen-to-square btn-circle"
             title="Modifier"></i></label>
       </div>

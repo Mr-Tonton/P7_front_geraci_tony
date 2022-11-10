@@ -1,0 +1,38 @@
+<div class="new-post-preview" *ngIf="!postUpdate">
+    <form *ngIf="!validPost" [formGroup]="postForm" class="post-preview-heading">
+        <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
+        <textarea #inputArea formControlName="postContent" autofocus (keyup)="autoGrow($event)"></textarea>
+        <input #inputImage type="file" accept="image/png, image/jpeg" (change)="onFileAdded($event)" name="file"
+            id="file" class="inputfile" />
+        <label for="file"><i class="fa-solid fa-image" title="Ajouter une image"></i></label>
+        <button (click)="onPostSubmit()"><i class="fa-regular fa-paper-plane" title="Envoyer"></i></button>
+    </form>
+    <div class="separator separator-heading"></div>
+
+    <div class="post-preview-content">
+        <div *ngIf="imagePreview" class="img-container">
+            <img [src]="imagePreview" alt="image profil de base" />
+            <i *ngIf="imagePreview" class="fa-regular fa-rectangle-xmark" (click)="cancelImage()"></i>
+        </div>
+    </div>
+</div>
+
+<div class="new-post-preview" *ngIf="postUpdate">
+    <form *ngIf="!validPost" [formGroup]="updatePostForm" class="post-preview-heading">
+        <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
+        <textarea #inputArea formControlName="postContent" autofocus (keyup)="autoGrow($event)"
+            (focus)="autoGrow($event)"></textarea>
+        <input #inputImage type="file" accept="image/png, image/jpeg" (change)="onFileAdded($event)" name="file"
+            id="file" class="inputfile" />
+        <label for="file"><i class="fa-solid fa-image" title="Ajouter une image"></i></label>
+        <button (click)="onUpdatePostSubmit()"><i class="fa-regular fa-paper-plane" title="Envoyer"></i></button>
+    </form>
+    <div class="separator separator-heading"></div>
+
+    <div class="post-preview-content">
+        <div *ngIf="imagePreview" class="img-container">
+            <img [src]="imagePreview" alt="image profil de base" />
+            <i *ngIf="imagePreview" class="fa-regular fa-rectangle-xmark" (click)="cancelImage()"></i>
+        </div>
+    </div>
+</div>

@@ -4,42 +4,29 @@
     <section *ngIf="showPreview" class="post-container-preview">
         <i *ngIf="!validPost" (click)="closePreview()" class="fa-regular fa-rectangle-xmark exit-icon"
             title="Fermer"></i>
-        <div class="new-post-preview">
-            <form *ngIf="!validPost" [formGroup]="postForm" class="post-preview-heading">
-                <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
-                <textarea #inputArea formControlName="postContent" autofocus (keyup)="autoGrow($event)"></textarea>
-                <input #inputImage type="file" accept="image/png, image/jpeg" (change)="onFileAdded($event)" name="file"
-                    id="file" class="inputfile" />
-                <label for="file"><i class="fa-solid fa-image" title="Ajouter une image"></i></label>
-                <button (click)="onPostSubmit()"><i class="fa-regular fa-paper-plane" title="Envoyer"></i></button>
-            </form>
-            <div class="separator separator-heading"></div>
-
-            <div class="post-preview-content">
-                <div *ngIf="imagePreview" class="img-container">
-                    <img [src]="imagePreview" alt="image profil de base" />
-                    <i *ngIf="imagePreview" class="fa-regular fa-rectangle-xmark" (click)="cancelImage()"></i>
-                </div>
-            </div>
-        </div>
+        <app-post-form (postPosted)="postedPost()" (postUpdated)="updatedPost()" [postUpdate]="postUpdate">
+        </app-post-form>
     </section>
     <!-- AJOUT DE NOUVELLE PUBLICATIONS -->
-    <section class="new-post-container">
-        <div *ngIf="onLoading" class="spinner-container">
-            <mat-spinner></mat-spinner>
+    <div class="feed-container" *ngIf="!showPreview">
+        <section class="new-post-container">
+            <div *ngIf="onLoading" class="spinner-container">
+                <mat-spinner></mat-spinner>
+            </div>
+            <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
+            <div (click)="openPreview()" class="new-post-laucher">Partagez une idée, posez une question ...</div>
+        </section>
+
+        <!-- LISTE DES PUBLICATIONS -->
+
+        <section class="list-posts-container">
+
+            <!-- *ngFor sur post-container -->
+            <app-post *ngFor="let post of fewPosts" [post]="post" (postDeleted)="deletedPost($event)"
+                (postUpdateStarted)="updatePost($event)"></app-post>
+        </section>
+        <div class="show-more-posts">
+            <button *ngIf="!noMorePosts" class="btn btn-primary" (click)="getPosts()">Voir plus de publications</button>
         </div>
-        <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
-        <div (click)="openPreview()" class="new-post-laucher">Partagez une idée, posez une question ...</div>
-    </section>
-
-    <!-- LISTE DES PUBLICATIONS -->
-
-    <section class="list-posts-container">
-
-        <!-- *ngFor sur post-container -->
-        <app-post *ngFor="let post of fewPosts" [post]="post" (postDeleted)="deletedPost($event)"></app-post>
-    </section>
-    <div class="show-more-posts">
-        <button *ngIf="!noMorePosts" class="btn btn-primary" (click)="getPosts()">Voir plus de publications</button>
     </div>
 </main>

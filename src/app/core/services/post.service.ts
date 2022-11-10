@@ -18,12 +18,31 @@ export class PostService {
   }
 
   createPost(post: Post, image?: File | string): Observable<Object> {
-    const formData = new FormData();
-    formData.append('post', JSON.stringify(post));
+    const createFormData = new FormData();
+    createFormData.append('post', JSON.stringify(post));
     if (image !== undefined) {
-      formData.append('image', image);
+      createFormData.append('image', image);
     }
-    return this.http.post<{ message: string }>(`${this.postUrl}`, formData);
+    return this.http.post<{ message: string }>(
+      `${this.postUrl}`,
+      createFormData
+    );
+  }
+
+  updatePost(
+    postId: string,
+    post: Post,
+    image?: File | string
+  ): Observable<Object> {
+    const updateFormData = new FormData();
+    updateFormData.append('updatePost', JSON.stringify(post));
+    if (image !== undefined) {
+      updateFormData.append('image', image);
+    }
+    return this.http.put<{ message: string }>(
+      `${this.postUrl}/${postId}`,
+      updateFormData
+    );
   }
 
   deletePost(post_id: string) {

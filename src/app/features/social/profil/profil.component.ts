@@ -12,7 +12,7 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./profil.component.scss'],
 })
 export class ProfilComponent implements OnInit {
-  @ViewChild('takeInput', { static: false })
+  @ViewChild('inputImage', { static: false })
   inputImage!: ElementRef<HTMLInputElement>;
   currentUserInfo: User | undefined;
   nameForm!: FormGroup;
@@ -20,7 +20,7 @@ export class ProfilComponent implements OnInit {
   changingName = false;
   deleteAccount = false;
   acceptDeleteAccount = false;
-  file!: File;
+  file!: File | undefined;
   imagePreview: boolean = false;
   imageContainer: string | undefined = undefined;
 
@@ -92,12 +92,15 @@ export class ProfilComponent implements OnInit {
             'Fermer',
             'error-snackbar'
           );
+          console.log(error);
           return EMPTY;
         })
       )
       .subscribe((res) => {
         this.imagePreview = false;
         this.currentUserInfo!.imageUrl = res;
+        this.file = undefined;
+        this.inputImage.nativeElement.value = '';
         this.imageContainer = this.currentUserInfo?.imageUrl;
         this.notificationService.openSnackBar(
           'Photo de profil modifiée avec succès !',
@@ -111,6 +114,7 @@ export class ProfilComponent implements OnInit {
     this.inputImage.nativeElement.value = '';
     this.imagePreview = false;
     this.imageContainer = this.currentUserInfo?.imageUrl;
+    this.file = undefined;
   }
 
   startDeleteUser() {

@@ -20,6 +20,7 @@ export class PostComponent implements OnInit {
   postUser!: User;
   @Input() post!: Post;
   @Output() postDeleted: EventEmitter<string> = new EventEmitter<string>();
+  @Output() postUpdateStarted: EventEmitter<Post> = new EventEmitter<Post>();
   showComments = false;
   showChoice = false;
   deletePost = false;
@@ -148,7 +149,9 @@ export class PostComponent implements OnInit {
       });
   }
 
-  onUpdatePost() {}
+  onUpdatePost() {
+    this.postUpdateStarted.emit(this.post);
+  }
 
   resetComments() {
     this.fewComments = [];

@@ -1,0 +1,109 @@
+// INDEPENDENT ELEMENTS
+.small-profil-picture {
+    box-shadow: 0 0 50px var(--primary);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    border: 3px solid var(--text-color);
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+i {
+    font-size: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .2s;
+
+    &:hover {
+        color: var(--secondary);
+        background-color: var(--text-color);
+    }
+}
+
+.separator {
+    margin: 15px 0 10px 0;
+    height: 1px;
+    border-radius: 5px;
+    background-color: var(--lightgray);
+
+    &-heading {
+        width: 50%;
+    }
+}
+
+// PREVIEW NEW POST
+
+.new-post-preview {
+    width: 80%;
+    margin: 50px auto 20px;
+    top: 60px;
+    background-color: var(--secondary);
+    padding: 20px 10px;
+    border-radius: 20px;
+
+    .post-preview-heading {
+        display: flex;
+        align-items: flex-start;
+
+        textarea {
+            font-family: var(--font-family);
+            font-size: 1.2rem;
+            width: 90%;
+            min-height: 70px;
+            padding: 5px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 5px var(--text-color);
+            border-radius: 3px;
+            resize: none;
+
+            &::-webkit-scrollbar {
+                width: 0px;
+            }
+        }
+
+        button {
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all .2s;
+            background-color: var(--secondary);
+            color: var(--text-color);
+
+            &:hover {
+                color: var(--secondary);
+                background-color: var(--text-color);
+            }
+        }
+    }
+
+    .post-preview-content {
+        width: 80%;
+        margin: 50px auto;
+
+        p {
+            text-align: justify;
+        }
+
+        .img-container {
+            width: 60%;
+            margin: 30px auto;
+            display: flex;
+
+            img {
+                width: 100%;
+                border: 1px solid var(--primary);
+                box-shadow: 0 0 5px var(--text-color);
+                border-radius: 3px;
+            }
+
+            i {
+                height: 30px;
+                margin-left: 10px;
+            }
+        }
+
+    }
+}

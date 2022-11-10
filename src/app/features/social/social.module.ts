@@ -6,6 +6,7 @@ import { PostComponent } from './post/post.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommentComponent } from './comment/comment.component';
+import { PostFormComponent } from './post-form/post-form.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { CommentComponent } from './comment/comment.component';
     ProfilComponent,
     PostComponent,
     CommentComponent,
+    PostFormComponent,
   ],
   imports: [
     CommonModule,
