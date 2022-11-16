@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+
 import { Post } from '../interfaces/post.interface';
 import { AuthService } from './auth.service';
 
@@ -13,7 +15,7 @@ export class PostService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getPosts(skip: number, limit: number) {
+  getPosts(skip: number, limit: number): Observable<any> {
     return this.http.get<any>(`${this.postUrl}/${skip}/${limit}`);
   }
 
@@ -45,11 +47,11 @@ export class PostService {
     );
   }
 
-  deletePost(post_id: string) {
+  deletePost(post_id: string): Observable<Object> {
     return this.http.delete(`${this.postUrl}/${post_id}`);
   }
 
-  likePost(id: string, like: boolean) {
+  likePost(id: string, like: boolean): Observable<Object> {
     return this.http.post(`${this.postUrl}/${id}/like`, {
       userId: this.authService.getUserId(),
       like: like ? 1 : 0,

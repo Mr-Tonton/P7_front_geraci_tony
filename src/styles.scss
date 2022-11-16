@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
 ul {
@@ -17,6 +18,10 @@ img {
 a {
     text-decoration: none;
     color: inherit;
+}
+
+button {
+    border: none;
 }
 
 :root {
@@ -53,6 +58,10 @@ body {
 
 .mat-simple-snackbar {
     font-size: 20px !important;
+
+    @media(max-width: 700px) {
+        font-size: 14px !important;
+    }
 }
 
 .success-snackbar {
@@ -73,6 +82,21 @@ body {
     }
 }
 
+button:disabled,
+button[disabled] {
+    color: var(--alert-color);
+    background-color: #cccccc;
+    border: 1px solid var(--alert-color);
+
+    &:hover {
+        border: 1px solid #999999;
+        background-color: var(--alert-color);
+        color: var(--text-color);
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+}
+
 .btn {
     padding: 15px 20px;
     background-color: white;
@@ -86,6 +110,13 @@ body {
     &-primary {
         background-color: var(--lightgray);
         color: var(--primary);
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: var(--text-color);
+            box-shadow: 0 0 3px var(--text-color);
+        }
+
 
         &-smaller {
             background-color: var(--lightgray);
@@ -94,24 +125,22 @@ body {
             font-size: 1rem;
             transition: background-color 0.3s;
 
-
             &:hover {
                 background-color: var(--text-color);
                 box-shadow: 0 0 3px var(--text-color);
             }
         }
 
-        &:hover {
-            background-color: var(--text-color);
-            box-shadow: 0 0 3px var(--text-color);
+        @media(max-width: 700px) {
+            padding: 7px 10px;
+            font-size: 1rem;
         }
-
-        transition: background-color 0.3s;
     }
 
     &-alert {
         background-color: var(--text-color);
         color: var(--primary);
+        transition: background-color 0.3s;
 
         &-smaller {
             background-color: var(--text-color);
@@ -146,7 +175,6 @@ body {
             color: var(--text-color);
         }
 
-        transition: background-color 0.3s;
     }
 
     &-circle {
@@ -156,16 +184,38 @@ body {
         color: var(--text-color);
         border-radius: 50%;
         padding: 10px 10px;
+        transition: background-color 0.3s;
 
         &:hover {
             background-color: var(--text-color);
             color: var(--primary);
         }
 
-        transition: background-color 0.3s;
     }
 
     &-comment {
+        cursor: pointer;
+        background-color: var(--tertiary);
+        border: none;
+        color: var(--text-color);
+        padding: 8px 8px;
+        border-radius: 3px;
+        transition: color 0.3s;
+
+        &:hover {
+            color: var(--alert-color);
+        }
+    }
+
+    &-icon {
+        font-size: 20px;
+
+        @media (max-width: 700px) {
+            font-size: 16px;
+        }
+    }
+
+    &-show-comment {
         padding: 5px 10px;
         background-color: var(--secondary);
         border: 0;
@@ -177,12 +227,75 @@ body {
         color: var(--text-color);
         transition: all 0.4s;
 
+        @media(max-width:550px) {
+            font-size: .8rem;
+        }
+
         &:hover {
             box-shadow: 0 0 3px var(--text-color);
             background-color: var(--secondary);
             border: 1px solid var(--text-color);
         }
+    }
 
+    &-post {
+        font-size: 20px;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        color: var(--text-color);
+        background-color: var(--secondary);
+        transition: all .3s;
+
+        &:hover {
+            color: var(--secondary);
+            background-color: var(--text-color);
+        }
+
+        &-like {
+            box-shadow: 0 0 3px var(--text-color);
+            transition: all .1s;
+
+            &:hover {
+                background-color: var(--secondary);
+                color: var(--text-color);
+                box-shadow: 0 0 6px var(--text-color);
+            }
+        }
+
+
+        @media (max-width: 550px) {
+            font-size: .9rem;
+        }
+
+        &-liked {
+            color: var(--valid-color);
+            box-shadow: 0 0 3px var(--valid-color);
+            transition: all .1s;
+
+            &:hover {
+                background-color: var(--secondary);
+                color: var(--valid-color);
+                box-shadow: 0 0 6px var(--valid-color);
+            }
+        }
+    }
+
+}
+
+.separator {
+    margin: 15px 0 10px 0;
+    height: 1px;
+    border-radius: 5px;
+    background-color: var(--lightgray);
+
+    &-heading {
+        width: 50%;
+    }
+
+    &-post {
+        width: 80%;
+        margin: auto;
     }
 }
 
@@ -192,7 +305,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: var(--secondary);
-    max-width: 800px;
+    max-width: 900px;
     margin: auto;
     border-radius: 5px;
     padding: 50px 0;
@@ -215,6 +328,40 @@ body {
         font-size: 1.2rem;
         border-radius: 5px;
     }
+
+    @media (max-width: 900px) {
+        padding: 20px 0;
+        border-radius: 0px;
+
+        &-group {
+            width: 90%;
+            margin: 5px;
+        }
+    }
+}
+
+.small-profil-picture {
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 5px var(--text-color);
+    margin-right: 20px;
+    object-fit: cover;
+
+    @media (max-width: 550px) {
+        width: 50px;
+        height: 50px;
+    }
+
+    &-comment {
+        width: 50px;
+        height: 50px;
+
+        @media (max-width: 550px) {
+            display: none;
+        }
+    }
 }
 
 
@@ -232,14 +379,6 @@ body {
     font-weight: bold;
     text-align: center;
     padding: 0 5px;
-
-    &-final {
-        font-size: 1.2rem;
-    }
-
-    &-small {
-        font-size: .5rem;
-    }
 }
 
 .text-valid {
@@ -247,12 +386,9 @@ body {
     font-weight: bold;
     text-align: center;
     padding: 0 5px;
-
-    &-final {
-        font-size: 1.2rem;
-    }
 }
 
+// button ajout d'image
 .inputfile {
     width: 0.1px;
     height: 0.1px;
@@ -270,14 +406,4 @@ body {
 
 .d2 {
     border: solid 1px green;
-}
-
-html,
-body {
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
 }

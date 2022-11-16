@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Observable, shareReplay } from 'rxjs';
+
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -17,7 +19,7 @@ export class HeaderComponent implements OnInit {
     this.isAuth$ = this.authService.getIsAuth().pipe(shareReplay(1));
   }
 
-  public logOut() {
+  public logOut(): void {
     this.authService.logout();
   }
 }

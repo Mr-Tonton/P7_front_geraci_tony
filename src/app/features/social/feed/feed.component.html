@@ -2,8 +2,9 @@
     <!-- PREVIEW NEW POST -->
 
     <section *ngIf="showPreview" class="post-container-preview">
-        <i *ngIf="!validPost" (click)="closePreview()" class="fa-regular fa-rectangle-xmark exit-icon"
-            title="Fermer"></i>
+        <button class="exit-icon">
+            <i *ngIf="!validPost" (click)="closePreview()" class="fa-regular fa-rectangle-xmark" title="Fermer"></i>
+        </button>
         <app-post-form (postPosted)="postedPost()" (postUpdated)="updatedPost()" [postUpdate]="postUpdate">
         </app-post-form>
     </section>
@@ -26,7 +27,13 @@
                 (postUpdateStarted)="updatePost($event)"></app-post>
         </section>
         <div class="show-more-posts">
-            <button *ngIf="!noMorePosts" class="btn btn-primary" (click)="getPosts()">Voir plus de publications</button>
+            <button *ngIf="!noMorePosts" class="btn btn-primary" (click)="getPosts()">Voir plus de
+                publications</button>
         </div>
+    </div>
+    <!-- BOUTON BACK TO TOP -->
+    <div class="back-to-top is-on-top" #backToTopBtn>
+        <button title="retourner en haut" class="btn btn-primary" (click)="backToTop()"><i
+                class="fa-solid fa-angles-up"></i></button>
     </div>
 </main>

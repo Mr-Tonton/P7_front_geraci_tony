@@ -5,7 +5,7 @@
       <div>
         <input type="file" accept="image/png, image/jpeg" #inputImage (change)="onFileAdded($event)" name="file"
           id="file" class="inputfile" />
-        <label *ngIf="!imagePreview" for="file"><i class="fa-regular fa-pen-to-square btn-circle"
+        <label *ngIf="!imagePreview" for="file"><i class="fa-regular fa-pen-to-square btn-circle btn-icon"
             title="Modifier"></i></label>
       </div>
     </form>
@@ -27,19 +27,19 @@
         <div class="name-info">
           <p>nom d'utilisateur : <span>{{ currentUserInfo?.name }}</span></p>
           <button *ngIf="!changingName" class="btn-circle" (click)="startChangingName()">
-            <i class="fa-regular fa-pen-to-square" title="Modifier"></i>
+            <i class="fa-regular fa-pen-to-square btn-icon" title="Modifier"></i>
           </button>
           <button *ngIf="changingName" class="btn-circle" (click)="startChangingName()">
-            <i class="fa-regular fa-square-minus" title="Modifier"></i>
+            <i class="fa-regular fa-square-minus btn-icon" title="Modifier"></i>
           </button>
         </div>
         <form [formGroup]="nameForm" class="updateName" *ngIf="changingName">
           <input type="text" formControlName="name" [placeholder]="currentUserInfo?.name">
           <button class=" btn-circle" (click)="onNameSubmit()" [disabled]="!nameForm.valid">
-            <i class="fa-regular fa-paper-plane"></i>
+            <i class="fa-regular fa-paper-plane btn-icon"></i>
           </button>
         </form>
-        <p class="text-alert" *ngIf="nameForm.get('name')!.hasError('pattern')">Votre entrée ne doit
+        <p class="text-alert" *ngIf="nameForm.get('name')!.hasError('pattern')">Votre nom d'utilisateur ne doit
           pas contenir de
           caractères spéciaux et faire moins de 30 caractères</p>
       </div>
@@ -48,8 +48,8 @@
       </div>
     </div>
     <div class="delete-user-container">
-      <button *ngIf="!acceptDeleteAccount" (click)="startDeleteUser()" class="btn btn-alert">Supprimer le
-        compte?</button>
+      <button (click)="startDeleteUser()" class="btn btn-alert">Supprimer le
+        compte ?</button>
       <div *ngIf="deleteAccount" class="delete-user-validator">
         <div>
           <button class="btn btn-primary" (click)="stopDeleteUser()">Annuler</button>

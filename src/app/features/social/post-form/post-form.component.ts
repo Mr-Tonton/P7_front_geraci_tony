@@ -8,15 +8,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { catchError, EMPTY } from 'rxjs';
 
 import { User } from 'src/app/core/interfaces/user.interface';
-
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { Post } from 'src/app/core/interfaces/post.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { PostService } from 'src/app/core/services/post.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { Post } from 'src/app/core/interfaces/post.interface';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-post-form',
@@ -58,24 +58,24 @@ export class PostFormComponent implements OnInit {
     if (this.postUpdate) {
       this.initUpdateForm();
       this.imagePreview = this.postUpdate.imageUrl;
-      console.log(this.imagePreview);
     }
   }
 
-  initEmptyForm() {
+  initEmptyForm(): void {
     this.postForm = this.fb.group({
       postContent: [null, Validators.required],
       userId: [null],
     });
   }
 
-  initUpdateForm() {
+  initUpdateForm(): void {
     this.updatePostForm = this.fb.group({
       postContent: [this.postUpdate!.postContent, Validators.required],
+      deletedImage: [false],
     });
   }
 
-  onPostSubmit() {
+  onPostSubmit(): void {
     this.postForm.get('userId')?.setValue(this.currentUserInfo?.userId);
     this.postService
       .createPost(this.postForm.value, this.file ?? undefined)
@@ -112,7 +112,10 @@ export class PostFormComponent implements OnInit {
       });
   }
 
-  onUpdatePostSubmit() {
+  onUpdatePostSubmit(): void {
+    if (this.postUpdate?.imageUrl && this.imagePreview === undefined) {
+      this.updatePostForm.get('deletedImage')?.setValue(true);
+    }
     this.postService
       .updatePost(
         this.postUpdate!._id,
@@ -152,23 +155,25 @@ export class PostFormComponent implements OnInit {
       });
   }
 
-  autoGrow(e: any) {
+  autoGrow(e: any): void {
     this.inputArea.nativeElement.style.height = `auto`;
     this.inputArea.nativeElement.style.height = `${e.target.scrollHeight}px`;
   }
 
-  cancelImage() {
+  cancelImage(): void {
     this.imagePreview = undefined;
     this.file = undefined;
     this.inputImage.nativeElement.value = '';
   }
 
-  onFileAdded(event: Event) {
+  onFileAdded(event: Event): void {
     this.file = (event.target as HTMLInputElement).files![0];
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result as string;
     };
-    reader.readAsDataURL(this.file);
+    if (this.file !== undefined) {
+      reader.readAsDataURL(this.file);
+    }
   }
 }

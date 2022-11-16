@@ -1,15 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { catchError, EMPTY } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { catchError, EMPTY, Subscription } from 'rxjs';
+
+import { environment } from 'src/environments/environment';
 import { Post } from 'src/app/core/interfaces/post.interface';
 import { User } from 'src/app/core/interfaces/user.interface';
 import { Comment } from 'src/app/core/interfaces/comment.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { PostService } from 'src/app/core/services/post.service';
 import { CommentService } from 'src/app/core/services/comment.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { PostService } from 'src/app/core/services/post.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { environment } from 'src/environments/environment';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-post',
@@ -50,7 +52,7 @@ export class PostComponent implements OnInit {
     this.initEmptyForm();
   }
 
-  initEmptyForm() {
+  initEmptyForm(): void {
     this.commentForm = this.fb.group({
       commentContent: [null, Validators.required],
       userId: [null],
@@ -84,7 +86,7 @@ export class PostComponent implements OnInit {
       });
   }
 
-  openCloseComments() {
+  openCloseComments(): void {
     if (!this.showComments && this.fewComments.length > 0) {
       this.showComments = true;
       this.showCommentsText = 'cacher commentaires';
@@ -96,7 +98,7 @@ export class PostComponent implements OnInit {
     }
   }
 
-  getCurrentUserInfo() {
+  getCurrentUserInfo(): void {
     this.currentUserId = this.authService.getUserId();
     this.userService.getUserInfo(this.currentUserId).subscribe((res) => {
       this.currentUserTypeAccount = res.accountType;
@@ -106,12 +108,12 @@ export class PostComponent implements OnInit {
     });
   }
 
-  getUserInfo() {
-    return this.userService.getUserInfo(this.post.userId).subscribe((res) => {
+  getUserInfo(): void {
+    this.userService.getUserInfo(this.post.userId).subscribe((res) => {
       this.postUser = res;
     });
   }
-  openPostChoice() {
+  openPostChoice(): void {
     if (this.showChoice) {
       this.showChoice = false;
     } else {
@@ -119,17 +121,17 @@ export class PostComponent implements OnInit {
     }
   }
 
-  openDeletePost() {
+  openDeletePost(): void {
     this.deletePost = true;
     this.showChoice = false;
   }
 
-  stopDeletePost() {
+  stopDeletePost(): void {
     this.deletePost = false;
     this.showChoice = false;
   }
 
-  onDeletePost() {
+  onDeletePost(): void {
     this.postService
       .deletePost(this.post._id)
       .pipe(
@@ -149,17 +151,17 @@ export class PostComponent implements OnInit {
       });
   }
 
-  onUpdatePost() {
+  onUpdatePost(): void {
     this.postUpdateStarted.emit(this.post);
   }
 
-  resetComments() {
+  resetComments(): void {
     this.fewComments = [];
     this.skip = 0;
     this.noMoreComments = false;
   }
 
-  onCommentSubmit() {
+  onCommentSubmit(): void {
     this.commentForm.get('userId')?.setValue(this.currentUserId);
     this.commentService
       .createComment(this.post._id, this.commentForm.value)
@@ -191,18 +193,18 @@ export class PostComponent implements OnInit {
         this.resetComments();
         this.getComments();
         this.showComments = true;
-        this.showCommentsText = 'cacher commentaire';
+        this.showCommentsText = 'cacher commentaires';
       });
   }
 
-  onLike() {
+  onLike(): void {
     this.postService.likePost(this.post._id, !this.liked).subscribe(() => {
       this.liked = !this.liked;
       this.post.likes = this.liked ? this.post.likes + 1 : this.post.likes - 1;
     });
   }
 
-  deletedComment($event: string) {
+  deletedComment($event: string): void {
     let newArray = this.fewComments.filter((comment) => comment._id !== $event);
     this.commentCollectionLength--;
     this.skip--;

@@ -1,0 +1,46 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 0;
+
+    @media(max-width:550px) {
+        padding: 20px 0;
+    }
+
+    h1 {
+        font-size: 4rem;
+
+        @media(max-width:900px) {
+            font-size: 2.5rem;
+        }
+
+        @media(max-width:550px) {
+            font-size: 2rem;
+        }
+    }
+
+    img {
+        width: 80%;
+        max-width: 400px;
+        object-fit: cover;
+        margin: 40px 0;
+        border: 1px solid var(--primary);
+        box-shadow: 0 0 5px var(--text-color);
+        border-radius: 3px;
+
+        @media(max-width:900px) {
+            margin: 20px 0;
+        }
+    }
+
+    button {
+        @media(max-width:900px) {
+            font-size: 1rem;
+        }
+
+        @media(max-width:550px) {
+            font-size: .8rem;
+        }
+    }
+}

@@ -1,7 +1,14 @@
 .container {
-    position: relative;
-    width: 95%;
-    max-width: 1200px;
-    margin: 50px auto;
+  position: relative;
+  width: 95%;
+  max-width: 1200px;
+  margin: 50px auto;
+}
+
+@media (max-width: 900px) {
+
+  .container {
+    width: 100%;
+    margin: 30px auto;
   }
-  
+}

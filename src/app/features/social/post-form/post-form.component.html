@@ -1,11 +1,15 @@
+<!-- Creation de post -->
 <div class="new-post-preview" *ngIf="!postUpdate">
     <form *ngIf="!validPost" [formGroup]="postForm" class="post-preview-heading">
         <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
         <textarea #inputArea formControlName="postContent" autofocus (keyup)="autoGrow($event)"></textarea>
-        <input #inputImage type="file" accept="image/png, image/jpeg" (change)="onFileAdded($event)" name="file"
-            id="file" class="inputfile" />
-        <label for="file"><i class="fa-solid fa-image" title="Ajouter une image"></i></label>
-        <button (click)="onPostSubmit()"><i class="fa-regular fa-paper-plane" title="Envoyer"></i></button>
+        <div class="button-container">
+            <input #inputImage type="file" accept="image/png, image/jpeg" (change)="onFileAdded($event)" name="file"
+                id="file" class="inputfile" />
+            <label for="file"><i class="fa-solid fa-image btn-post" title="Ajouter une image"></i></label>
+            <button class="btn-post" (click)="onPostSubmit()" [disabled]="postForm.invalid"><i
+                    class="fa-regular fa-paper-plane" title="Envoyer"></i></button>
+        </div>
     </form>
     <div class="separator separator-heading"></div>
 
@@ -17,15 +21,20 @@
     </div>
 </div>
 
+<!-- Modification de post -->
 <div class="new-post-preview" *ngIf="postUpdate">
     <form *ngIf="!validPost" [formGroup]="updatePostForm" class="post-preview-heading">
         <img class="small-profil-picture" [src]="currentUserInfo?.imageUrl" alt="image de profil">
         <textarea #inputArea formControlName="postContent" autofocus (keyup)="autoGrow($event)"
             (focus)="autoGrow($event)"></textarea>
-        <input #inputImage type="file" accept="image/png, image/jpeg" (change)="onFileAdded($event)" name="file"
-            id="file" class="inputfile" />
-        <label for="file"><i class="fa-solid fa-image" title="Ajouter une image"></i></label>
-        <button (click)="onUpdatePostSubmit()"><i class="fa-regular fa-paper-plane" title="Envoyer"></i></button>
+        <div class="button-container">
+            <input #inputImage type="file" accept="image/png, image/jpeg" (change)="onFileAdded($event)" name="file"
+                id="file" class="inputfile" />
+            <label for="file"><i class="fa-solid fa-image btn-post" title="Ajouter une image"></i></label>
+            <button class="btn-post" (click)="onUpdatePostSubmit()" [disabled]="updatePostForm.invalid"><i
+                    class="fa-regular fa-paper-plane" title="Envoyer"></i></button>
+        </div>
+
     </form>
     <div class="separator separator-heading"></div>
 

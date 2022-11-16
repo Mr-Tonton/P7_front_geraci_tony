@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { tap, catchError, EMPTY, switchMap } from 'rxjs';
+
+import { catchError, EMPTY, switchMap } from 'rxjs';
+
 import { AuthUser } from 'src/app/core/interfaces/auth-user.interface';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
@@ -24,7 +26,7 @@ export class SignupComponent implements OnInit {
     this.initEmptyForm();
   }
 
-  initEmptyForm() {
+  initEmptyForm(): void {
     this.signinForm = this.fb.group({
       email: [
         null,
@@ -50,7 +52,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  onSignup() {
+  onSignup(): void {
     const userEntries: AuthUser = this.signinForm.value;
     this.authService
       .createUser(userEntries)

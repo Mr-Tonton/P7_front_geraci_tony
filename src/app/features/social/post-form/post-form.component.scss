@@ -1,35 +1,7 @@
 // INDEPENDENT ELEMENTS
 .small-profil-picture {
-    box-shadow: 0 0 50px var(--primary);
-    border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    border: 3px solid var(--text-color);
-    margin-right: 20px;
-    object-fit: cover;
-}
-
-i {
-    font-size: 20px;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all .2s;
-
-    &:hover {
-        color: var(--secondary);
-        background-color: var(--text-color);
-    }
-}
-
-.separator {
-    margin: 15px 0 10px 0;
-    height: 1px;
-    border-radius: 5px;
-    background-color: var(--lightgray);
-
-    &-heading {
-        width: 50%;
+    @media (max-width: 550px) {
+        display: none;
     }
 }
 
@@ -43,6 +15,11 @@ i {
     padding: 20px 10px;
     border-radius: 20px;
 
+    @media (max-width: 900px) {
+        border-radius: 0px;
+        width: 100%;
+    }
+
     .post-preview-heading {
         display: flex;
         align-items: flex-start;
@@ -53,6 +30,7 @@ i {
             width: 90%;
             min-height: 70px;
             padding: 5px;
+            margin-right: 5px;
             border: 2px solid var(--primary);
             box-shadow: 0 0 5px var(--text-color);
             border-radius: 3px;
@@ -63,25 +41,23 @@ i {
             }
         }
 
-        button {
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all .2s;
-            background-color: var(--secondary);
-            color: var(--text-color);
+        .button-container {
+            display: flex;
 
-            &:hover {
-                color: var(--secondary);
-                background-color: var(--text-color);
+            button {
+                margin-left: 5px;
             }
+
         }
     }
 
     .post-preview-content {
         width: 80%;
         margin: 50px auto;
+
+        @media (max-width: 900px) {
+            width: 100%;
+        }
 
         p {
             text-align: justify;
@@ -93,17 +69,23 @@ i {
             display: flex;
 
             img {
-                width: 100%;
+                width: auto;
+                margin: auto;
+                max-height: 500px;
                 border: 1px solid var(--primary);
                 box-shadow: 0 0 5px var(--text-color);
                 border-radius: 3px;
             }
 
-            i {
+            .fa-rectangle-xmark {
                 height: 30px;
                 margin-left: 10px;
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--alert-color);
+                }
             }
         }
-
     }
 }

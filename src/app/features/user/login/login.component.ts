@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { tap, catchError, EMPTY } from 'rxjs';
+
+import { catchError, EMPTY } from 'rxjs';
+
 import { AuthUser } from 'src/app/core/interfaces/auth-user.interface';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
@@ -24,7 +26,7 @@ export class LoginComponent implements OnInit {
     this.initEmptyForm();
   }
 
-  initEmptyForm() {
+  initEmptyForm(): void {
     this.loginForm = this.fb.group({
       email: [
         null,
@@ -37,7 +39,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onLogin() {
+  onLogin(): void {
     const userEntries: AuthUser = this.loginForm.value;
     this.authService
       .loginUser(userEntries)
@@ -61,7 +63,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(() => {
         this.notificationService.openSnackBar(
-          'Identifiants valides, bienvenue sur Groupomania !',
+          'Bienvenue sur Groupomania !',
           'Fermer',
           'success-snackbar',
           5000

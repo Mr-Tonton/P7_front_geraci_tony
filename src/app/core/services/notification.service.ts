@@ -12,7 +12,7 @@ export class NotificationService {
     action: string,
     className = '',
     duration = 4000
-  ) {
+  ): void {
     this.snackBar.open(message, action, {
       duration: duration,
       panelClass: [className],

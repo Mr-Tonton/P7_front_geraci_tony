@@ -21,8 +21,9 @@
       <span class="text-alert"
         *ngIf="signinForm.get('password')!.hasError('required') && signinForm.get('password')!.touched">Votre mot de
         passe est requis</span>
-      <span class="text-alert" *ngIf="signinForm.get('password')!.hasError('pattern')">Mot de passe incorrect: min 8
-        caractères, 1 majuscule, 1 minuscule, 1 chiffre, max 64 caractères et pas d'espaces</span>
+      <span class="text-alert" *ngIf="signinForm.get('password')!.hasError('pattern')">Veuillez respecter les règles
+        suivantes : min 8
+        caractères, 1 majuscule, 1 minuscule, 1 chiffre, max 64 caractères, pas d'espaces</span>
       <span class="text-valid" *ngIf="signinForm.get('password')!.valid">Mot de passe valide</span>
     </div>
 
@@ -32,7 +33,8 @@
       <span class="text-alert"
         *ngIf="signinForm.get('name')!.hasError('required') && signinForm.get('name')!.touched">Votre nom est
         requis</span>
-      <span class="text-alert" *ngIf="signinForm.get('name')!.hasError('pattern')">Votre entrée ne doit pas contenir de
+      <span class="text-alert" *ngIf="signinForm.get('name')!.hasError('pattern')">Votre nom d'utilisateur ne doit pas
+        contenir de
         caractères spéciaux et faire moins de 30 caractères</span>
     </div>
 

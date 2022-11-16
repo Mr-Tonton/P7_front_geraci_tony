@@ -1,17 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, tap } from 'rxjs';
+
+import { catchError, EMPTY } from 'rxjs';
+
 import { User } from 'src/app/core/interfaces/user.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
-  templateUrl: './profil.component.html',
-  styleUrls: ['./profil.component.scss'],
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
 })
-export class ProfilComponent implements OnInit {
+export class ProfileComponent implements OnInit {
   @ViewChild('inputImage', { static: false })
   inputImage!: ElementRef<HTMLInputElement>;
   currentUserInfo: User | undefined;
@@ -19,7 +21,6 @@ export class ProfilComponent implements OnInit {
   imageForm!: FormGroup;
   changingName = false;
   deleteAccount = false;
-  acceptDeleteAccount = false;
   file!: File | undefined;
   imagePreview: boolean = false;
   imageContainer: string | undefined = undefined;
@@ -42,7 +43,7 @@ export class ProfilComponent implements OnInit {
     this.initEmptyForm();
   }
 
-  initEmptyForm() {
+  initEmptyForm(): void {
     this.nameForm = this.fb.group({
       name: [
         this.currentUserInfo?.name,
@@ -57,13 +58,13 @@ export class ProfilComponent implements OnInit {
     });
   }
 
-  startChangingName() {
+  startChangingName(): void {
     !this.changingName
       ? (this.changingName = true)
       : (this.changingName = false);
   }
 
-  onNameSubmit() {
+  onNameSubmit(): void {
     const nameEntry: { name: string } = this.nameForm.value;
     this.userService
       .updateName(this.currentUserInfo?.userId, nameEntry)
@@ -79,7 +80,7 @@ export class ProfilComponent implements OnInit {
     this.nameForm.reset();
   }
 
-  onImageSubmit() {
+  onImageSubmit(): void {
     this.userService
       .updateProfileImage(
         this.currentUserInfo?.userId,
@@ -110,22 +111,22 @@ export class ProfilComponent implements OnInit {
       });
   }
 
-  onImageCancel() {
+  onImageCancel(): void {
     this.inputImage.nativeElement.value = '';
     this.imagePreview = false;
     this.imageContainer = this.currentUserInfo?.imageUrl;
     this.file = undefined;
   }
 
-  startDeleteUser() {
+  startDeleteUser(): void {
     this.deleteAccount = true;
   }
 
-  stopDeleteUser() {
+  stopDeleteUser(): void {
     this.deleteAccount = false;
   }
 
-  onDeleteCurrentUser() {
+  onDeleteCurrentUser(): void {
     this.userService.deleteUser(this.currentUserInfo?.userId).subscribe(() => {
       this.authService.getIsAuth().next(false);
       this.notificationService.openSnackBar(
@@ -139,7 +140,7 @@ export class ProfilComponent implements OnInit {
     });
   }
 
-  onFileAdded(event: Event) {
+  onFileAdded(event: Event): void {
     this.file = (event.target as HTMLInputElement).files![0];
     this.imageForm.get('imageUrl')!.setValue(this.file);
     this.imageForm.updateValueAndValidity();

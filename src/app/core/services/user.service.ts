@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+
 import { User } from '../interfaces/user.interface';
 
 @Injectable({
@@ -26,7 +28,10 @@ export class UserService {
     );
   }
 
-  updateProfileImage(id: string | undefined, image: File | Blob) {
+  updateProfileImage(
+    id: string | undefined,
+    image: File | Blob
+  ): Observable<string> {
     const formData = new FormData();
     formData.append('image', image);
     return this.http.put<string>(
@@ -35,7 +40,7 @@ export class UserService {
     );
   }
 
-  deleteUser(id: string | undefined) {
+  deleteUser(id: string | undefined): Observable<string> {
     return this.http.delete<string>(`${this.baseUrl}/api/auth/${id}`);
   }
 }

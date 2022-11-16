@@ -2,7 +2,10 @@
   <nav>
     <div class="logo-container">
       <a routerLink="feed" title="Accueil">
-        <img src="../../../../assets/images/icon-left-font-monochrome-white.png" alt="logo groupomania blanc" />
+        <img class="bigger-image" src="../../../../assets/images/icon-left-font-monochrome-white.png"
+          alt="logo groupomania blanc" />
+        <img class="smaller-image" src="../../../../assets/images/icon-left-little.png"
+          alt="logo groupomania blanc sans texte" />
       </a>
     </div>
     <ul *ngIf="!(isAuth$ | async)">

@@ -1,4 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { catchError, EMPTY } from 'rxjs';
 
 import { Post } from 'src/app/core/interfaces/post.interface';
@@ -15,6 +21,8 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./feed.component.scss'],
 })
 export class FeedComponent implements OnInit {
+  @ViewChild('backToTopBtn', { static: false })
+  backToTopBtn!: ElementRef<HTMLInputElement>;
   postUpdate!: Post | undefined;
   postCollectionLength!: number;
   noMorePosts: boolean = false;
@@ -122,5 +130,23 @@ export class FeedComponent implements OnInit {
     this.showPreview = false;
     this.resetFeed();
     this.getPosts();
+  }
+
+  backToTop() {
+    window.scrollTo(0, 0);
+  }
+
+  @HostListener('window:scroll', [])
+  onScrollEvent() {
+    let currentPosition = window.scrollY;
+    if (currentPosition > 400) {
+      this.backToTopBtn.nativeElement.classList.remove('is-on-top');
+      this.backToTopBtn.nativeElement.animate(
+        [{ opacity: '0' }, { opacity: '0' }, { opacity: '.6' }],
+        { duration: 1000 }
+      );
+    } else {
+      this.backToTopBtn.nativeElement.classList.add('is-on-top');
+    }
   }
 }
