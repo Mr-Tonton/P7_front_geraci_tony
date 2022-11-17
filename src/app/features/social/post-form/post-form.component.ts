@@ -174,6 +174,8 @@ export class PostFormComponent implements OnInit {
     };
     if (this.file !== undefined) {
       reader.readAsDataURL(this.file);
+    } else {
+      this.cancelImage();
     }
   }
 }
